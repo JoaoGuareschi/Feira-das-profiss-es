@@ -1,0 +1,80 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { spawn } from 'node:child_process';
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { randomUUID } from 'node:crypto';
+
+test('login, proteção dos dados, CSRF, escape de HTML, logout e limite de tentativas', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'feira-auth-'));
+  const base = 'http://localhost:31987';
+  const server = spawn(process.execPath, ['server.js'], {cwd: new URL('.', import.meta.url), env:{...process.env, PORT:'31987', DATA_DIR:directory, ADMIN_EMAIL:'admin@example.test', ADMIN_PASSWORD:'senha-de-teste-123456789', APP_ORIGIN:base, NODE_ENV:'development'}, stdio:['ignore','pipe','pipe']});
+  try {
+    await new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error('Servidor não iniciou')), 10000);
+      server.stdout.on('data', data => { if (String(data).includes('Feira disponível')) {clearTimeout(timeout); resolve();} });
+      server.once('exit', code => {clearTimeout(timeout); reject(new Error('Servidor encerrou: ' + code));});
+    });
+    const request = (path, options = {}) => fetch(base + path, {redirect:'manual', ...options});
+    const login = (password = 'senha-de-teste-123456789', origin = base) => request('/admin/login', {method:'POST', headers:{Origin:origin, 'Content-Type':'application/x-www-form-urlencoded'}, body:new URLSearchParams({email:'admin@example.test',password})});
+    const loginPage = await request('/admin/login');
+    assert.equal(loginPage.headers.get('referrer-policy'), 'same-origin');
+    assert.equal((await login(undefined, 'null')).status, 403);
+    let result = await request('/admin');
+    assert.equal(result.status, 303); assert.equal(result.headers.get('location'), '/admin/login');
+    assert.equal((await request('/admin/privado')).status, 303);
+    assert.equal((await request('/admin/graficos')).status, 303);
+    assert.equal((await request('/api/exportar')).status, 401);
+    assert.equal((await request('/dados/feira.sqlite')).status, 404);
+    assert.equal((await login(undefined, 'https://outro.example')).status, 403);
+    result = await login('errada'); assert.equal(result.headers.get('location'), '/admin/login?erro=1');
+    result = await login(); assert.equal(result.status, 303);
+    const setCookie = result.headers.get('set-cookie');
+    assert.match(setCookie, /HttpOnly/); assert.match(setCookie, /SameSite=Strict/);
+    const cookie = setCookie.split(';')[0];
+    const emptyCharts = await request('/admin/graficos', {headers:{Cookie:cookie}});
+    assert.equal(emptyCharts.status, 200);
+    assert.ok((await emptyCharts.text()).includes('Ainda não há avaliações.'));
+    const cursos = await (await request('/api/cursos')).json();
+    assert.equal((await request('/api/respostas', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id:randomUUID(),curso:cursos[0],nota:5,comentario:'<script>alert(1)</script>'})})).status, 200);
+    result = await request('/admin', {headers:{Cookie:cookie}});
+    assert.equal(result.status, 200);
+    const page = await result.text();
+    assert.ok(page.includes('&lt;script&gt;')); assert.ok(!page.includes('<script>alert'));
+    const charts = await request('/admin/graficos', {headers:{Cookie:cookie}});
+    assert.equal(charts.status, 200);
+    const chartsHtml = await charts.text();
+    assert.ok(chartsHtml.includes('100%'));
+    assert.ok(chartsHtml.includes('<td>1</td><td>5</td><td>1</td><td>1</td>'));
+    assert.ok(!chartsHtml.includes('NaN'));
+    assert.ok(chartsHtml.includes('Pausar animações'));
+    const newFeedback = {id:randomUUID(),curso:cursos[0],nota:4,gostou:'Gostei da atividade prática <b>ótima</b>',sugestoes:'Mais tempo para perguntas'};
+    const submit = data => request('/api/respostas', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+    assert.equal((await submit(newFeedback)).status, 200);
+    assert.equal((await submit(newFeedback)).status, 200);
+    assert.equal((await submit({...newFeedback,sugestoes:'Outra ideia'})).status, 409);
+    assert.equal((await submit({...newFeedback,id:randomUUID(),gostou:'x'.repeat(1001)})).status, 400);
+    const updatedPanel = await (await request('/admin', {headers:{Cookie:cookie}})).text();
+    assert.ok(updatedPanel.includes('Gostei da atividade prática &lt;b&gt;ótima&lt;/b&gt;'));
+    assert.ok(updatedPanel.includes('Mais tempo para perguntas'));
+    const updatedCsv = await (await request('/api/exportar',{headers:{Cookie:cookie}})).text();
+    assert.ok(updatedCsv.includes('"O que gostou";"Sugestões";"Comentário antigo"'));
+    assert.ok(updatedCsv.includes('Mais tempo para perguntas'));
+    const csrf = page.match(/name="csrf" value="([a-f0-9]+)"/)[1];
+    result = await request('/api/exportar', {headers:{Cookie:cookie}}); assert.equal(result.status, 200);
+    assert.ok((await result.text()).includes(cursos[0]));
+    const logout = token => request('/admin/logout', {method:'POST', headers:{Cookie:cookie, Origin:base,'Content-Type':'application/x-www-form-urlencoded'}, body:new URLSearchParams({csrf:token})});
+    assert.equal((await logout('incorreto')).status, 403);
+    result = await logout(csrf); assert.equal(result.status, 303); assert.match(result.headers.get('set-cookie'), /Max-Age=0/);
+    assert.equal((await request('/api/exportar', {headers:{Cookie:cookie}})).status, 401);
+    assert.equal((await request('/admin', {headers:{Cookie:cookie}})).status, 303);
+    assert.equal((await request('/admin/graficos', {headers:{Cookie:cookie}})).status, 303);
+    for (let i = 0; i < 5; i++) await login('incorreta');
+    assert.equal((await login()).status, 429);
+  } finally {
+    const stopped = new Promise(resolve => server.once('exit', resolve));
+    if (server.exitCode === null) { server.kill(); await stopped; }
+    await rm(directory, {recursive:true, force:true});
+  }
+});
