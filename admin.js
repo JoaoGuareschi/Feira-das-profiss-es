@@ -4,15 +4,13 @@ import { renderGraficos } from './graficos.js';
 import { renderRespostas } from './respostas.js';
 
 const derive = promisify(scrypt);
-const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const layout = (title, content) => `<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} · Feira</title><style>body{font:16px system-ui;background:#f4f7fe;color:#14274a;margin:0}main{max-width:1000px;margin:40px auto;padding:24px}form{max-width:420px}label{display:block;margin-top:16px}input{box-sizing:border-box;width:100%;padding:12px;font:inherit;margin:8px 0;border:1px solid #cbd8ed;border-radius:12px}button,a.botao{display:inline-block;background:#235ce6;color:white;padding:12px 18px;border:0;border-radius:12px;font:inherit;margin:12px 0;cursor:pointer}table{border-collapse:collapse;width:100%;background:white}td,th{padding:12px;border:1px solid #dce5f5;text-align:left;overflow-wrap:anywhere}section{overflow:auto}.erro{color:#962323}</style><main>${content}</main></html>`;
+const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
+const layout = (title, content) => `<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} · Feira</title><style>body{font-family:system-ui,sans-serif;margin:0;background:#eef4ff;color:#15233b}main{max-width:720px;margin:40px auto;padding:24px 20px}h1{margin:0 0 16px;font-size:clamp(2rem,3vw,2.7rem)}p{line-height:1.6}label{display:block;margin:16px 0 6px;font-weight:700}input,button,select{font:inherit}input,select{width:100%;padding:12px 14px;border:1px solid #c9d6f2;border-radius:10px;background:#fff;color:#13264d}button{display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;border:none;border-radius:10px;background:#1d5ce6;color:#fff;font-weight:700;cursor:pointer}a{color:#1d5ce6;text-decoration:none}a:hover{text-decoration:underline}.erro{color:#a52626;background:#fde9e9;border:1px solid #f3b5b5;padding:10px 12px;border-radius:10px;margin:12px 0}form{display:grid;gap:8px}.muted{color:#5a6c90}.status{margin-top:12px}.sr-only{position:absolute;left:-9999px}</style><body><main>${content}</main></body></html>`;
 
 export function createAdmin(db) {
   const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
   const password = process.env.ADMIN_PASSWORD;
   const production = process.env.NODE_ENV === 'production';
-  const origin = new URL(process.env.APP_ORIGIN || 'http://localhost:3000').origin;
-  if (production && (!process.env.APP_ORIGIN || !origin.startsWith('https://'))) throw new Error('Em produção, configure APP_ORIGIN com HTTPS.');
   const configured = Boolean(email && password && password.length >= 16);
   if (!configured) console.warn('Painel administrativo indisponível: configure ADMIN_EMAIL e ADMIN_PASSWORD com pelo menos 16 caracteres no .env. O questionário continua disponível.');
   const salt = randomBytes(32);
@@ -23,6 +21,12 @@ export function createAdmin(db) {
   const cookieName = production ? '__Host-feira_admin' : 'feira_admin';
   const hash = value => createHash('sha256').update(value).digest('hex');
   const cookie = (token, age) => `${cookieName}=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${age}${production ? '; Secure' : ''}`;
+  const originFor = req => {
+    if (process.env.APP_ORIGIN) return new URL(process.env.APP_ORIGIN).origin;
+    const proto = req.headers['x-forwarded-proto'] || 'http';
+    const host = req.headers.host || 'localhost:3000';
+    return `${proto}://${host}`;
+  };
   function token(req) {
     return req.headers.cookie?.split(';').map(c => c.trim()).find(c => c.startsWith(cookieName + '='))?.slice(cookieName.length + 1) || '';
   }
@@ -52,6 +56,7 @@ export function createAdmin(db) {
   }
   async function handle(req, res, path) {
     if (!(path === '/admin' || path.startsWith('/admin/'))) return false;
+    const origin = originFor(req);
     res.setHeader('Content-Security-Policy', "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'");
     if (path === '/admin/login' && req.method === 'GET') {
       if (session(req)) { redirect(res, '/admin'); return true; }
@@ -109,7 +114,7 @@ export function createAdmin(db) {
         db.prepare('DELETE FROM respostas WHERE id = ?').run(id);
         redirect(res, '/admin?excluida=1'); return true;
       }
-      html(res, 200, layout('Confirmar exclusão', `<h1>Excluir esta avaliação?</h1><p><strong>${esc(resposta.curso)}</strong> · Nota ${resposta.nota}/5</p><p>Esta ação é permanente e remove a avaliação dos gráficos e da exportação. Confira antes de confirmar.</p><form method="post" action="/admin/excluir"><input type="hidden" name="csrf" value="${found.csrf}"><input type="hidden" name="id" value="${esc(id)}"><label class="confirm-delete"><input type="checkbox" name="confirmar" value="sim" required> Confirmo que desejo excluir esta avaliação.</label><button class="delete-button">Excluir definitivamente</button></form><a href="/admin">Cancelar e voltar</a>`));
+      html(res, 200, layout('Confirmar exclusão', `<h1>Excluir esta avaliação?</h1><p><strong>${esc(resposta.curso)}</strong> · Nota ${resposta.nota}/5</p><p>Esta ação é permanente e remove a avaliação do banco.</p><form method="post"><input type="hidden" name="csrf" value="${esc(found.csrf)}"><input type="hidden" name="confirmar" value="sim"><input type="hidden" name="id" value="${esc(id || '')}"><button>Confirmar exclusão</button></form><p><a href="/admin">Cancelar</a></p>`));
       return true;
     }
     if (path === '/admin/graficos' && req.method === 'GET') {
