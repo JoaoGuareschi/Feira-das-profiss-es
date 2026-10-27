@@ -64,7 +64,7 @@ http.createServer(async (req, res) => {
     // Preserva a origem em formulários locais para a validação contra CSRF.
     res.setHeader('Referrer-Policy', 'same-origin');
     const path = new URL(req.url, appOrigin).pathname;
-    if (req.method === 'GET' && ['/tema.js', '/tema.css'].includes(path)) {
+    if (req.method === 'GET' && ['/tema.js', '/tema.css', '/graficos-live.js'].includes(path)) {
       res.writeHead(200, {'Content-Type':path.endsWith('.js') ? 'text/javascript; charset=utf-8' : 'text/css; charset=utf-8'});
       return res.end(readFileSync(new URL('.' + path, import.meta.url)));
     }

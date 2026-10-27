@@ -51,7 +51,7 @@ export function createAdmin(db) {
   }
   async function handle(req, res, path) {
     if (!(path === '/admin' || path.startsWith('/admin/'))) return false;
-    res.setHeader('Content-Security-Policy', "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'");
+    res.setHeader('Content-Security-Policy', "default-src 'none'; script-src 'self'; connect-src 'self'; style-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'");
     if (path === '/admin/login' && req.method === 'GET') {
       if (session(req)) { redirect(res, '/admin'); return true; }
       const error = new URL(req.url, origin).searchParams.has('erro');

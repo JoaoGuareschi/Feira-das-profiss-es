@@ -59,7 +59,7 @@ Para apagar uma resposta, clique em **Excluir avaliação** no cartão, confira 
 
 No painel, clique em **Ver gráficos e indicadores**, ou acesse `/admin/graficos` após entrar. A página é protegida pela mesma sessão administrativa e inclui pizzas de distribuição das notas e participação por curso, barras de quantidade e média por curso, indicadores e uma tabela detalhada. Usa todas as avaliações do banco, com cores fixas por curso. Sem respostas, mostra um estado vazio, sem dados fictícios.
 
-As animações são contínuas e podem ser pausadas pelo controle **Pausar animações**. A preferência de movimento reduzido do dispositivo é respeitada. Clique em **Atualizar dados** para obter novas respostas; não existe atualização automática. Totais representam avaliações e não visitantes únicos.
+As animações são contínuas e podem ser pausadas pelo controle **Pausar animações**. A preferência de movimento reduzido do dispositivo é respeitada. Os gráficos, indicadores e tabela consultam o servidor a cada 20 segundos sem recarregar a página. O botão **Atualizar agora** antecipa a consulta. Tema e pausa de animações são preservados; falhas de conexão mantêm os últimos resultados e a sessão expirada pede novo login. Totais representam avaliações e não visitantes únicos. Navegadores podem atrasar consultas em abas em segundo plano.
 
 O servidor carrega `.env` automaticamente, inclusive ao executar pelo F5. Variáveis já definidas no ambiente têm prioridade. O arquivo `.env` está ignorado pelo Git e nunca é servido pelo servidor. Não compartilhe esse arquivo nem envie sua senha no chat.
 
