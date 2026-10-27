@@ -93,14 +93,51 @@ export function createAdmin(db) {
     }
     const found = requireAdmin(req, res);
     if (!found) return true;
+    if (path === '/admin/excluir') {
+      if (req.method !== 'GET' && req.method !== 'POST') { html(res, 405, 'Método não permitido.'); return true; }
+      let data;
+      if (req.method === 'POST') {
+        if (req.headers.origin !== origin || (req.headers['sec-fetch-site'] && req.headers['sec-fetch-site'] !== 'same-origin')) { html(res, 403, 'Origem não permitida.'); return true; }
+        try { data = await form(req); } catch { html(res, 400, 'Formulário inválido.'); return true; }
+        if (data.get('csrf') !== found.csrf) { html(res, 403, 'Formulário inválido.'); return true; }
+        if (data.get('confirmar') !== 'sim') { html(res, 400, 'Confirme a exclusão antes de continuar.'); return true; }
+      } else data = new URL(req.url, origin).searchParams;
+      const id = data.get('id');
+      const resposta = db.prepare('SELECT id, curso, nota, data FROM respostas WHERE id = ?').get(id || '');
+      if (!resposta) { html(res, 404, layout('Avaliação não encontrada','<h1>Avaliação não encontrada</h1><a href="/admin">Voltar às avaliações</a>')); return true; }
+      if (req.method === 'POST') {
+        db.prepare('DELETE FROM respostas WHERE id = ?').run(id);
+        redirect(res, '/admin?excluida=1'); return true;
+      }
+      html(res, 200, layout('Confirmar exclusão', `<h1>Excluir esta avaliação?</h1><p><strong>${esc(resposta.curso)}</strong> · Nota ${resposta.nota}/5</p><p>Esta ação é permanente e remove a avaliação dos gráficos e da exportação. Confira antes de confirmar.</p><form method="post" action="/admin/excluir"><input type="hidden" name="csrf" value="${found.csrf}"><input type="hidden" name="id" value="${esc(id)}"><label class="confirm-delete"><input type="checkbox" name="confirmar" value="sim" required> Confirmo que desejo excluir esta avaliação.</label><button class="delete-button">Excluir definitivamente</button></form><a href="/admin">Cancelar e voltar</a>`));
+      return true;
+    }
     if (path === '/admin/graficos' && req.method === 'GET') {
       html(res, 200, renderGraficos(db, found.csrf));
       return true;
     }
     if (path !== '/admin' || req.method !== 'GET') { html(res, 404, 'Página não encontrada.'); return true; }
-    const rows = db.prepare('SELECT curso, nota, comentario, gostou, sugestoes, data FROM respostas ORDER BY data DESC LIMIT 500').all();
+    const params = new URL(req.url, origin).searchParams;
+    const filtros = {q:(params.get('q') || '').trim().slice(0,200),curso:params.get('curso') || '',nota:params.get('nota') || '',ordem:params.get('ordem') || 'recentes'};
+    const orders = {recentes:'data DESC, id ASC',antigas:'data ASC, id ASC',maior:'nota DESC, data DESC, id ASC',menor:'nota ASC, data DESC, id ASC',curso:'curso COLLATE NOCASE ASC, data DESC, id ASC'};
+    if (!Object.hasOwn(orders, filtros.ordem)) filtros.ordem = 'recentes';
+    if (!/^[1-5]$/.test(filtros.nota)) filtros.nota = '';
+    const clauses = []; const values = [];
+    if (filtros.q) {
+      clauses.push("(curso LIKE ? ESCAPE '\\' OR gostou LIKE ? ESCAPE '\\' OR sugestoes LIKE ? ESCAPE '\\' OR comentario LIKE ? ESCAPE '\\')");
+      const term = '%' + filtros.q.replace(/[\\%_]/g,'\\$&') + '%';
+      values.push(term,term,term,term);
+    }
+    if (filtros.curso) {clauses.push('curso = ?');values.push(filtros.curso);}
+    if (filtros.nota) {clauses.push('nota = ?');values.push(Number(filtros.nota));}
+    const where = clauses.length ? ' WHERE ' + clauses.join(' AND ') : '';
+    const encontrados = db.prepare('SELECT COUNT(*) AS total FROM respostas' + where).get(...values).total;
+    const paginas = Math.max(1,Math.ceil(encontrados/50));
+    const pagina = Math.min(paginas, Math.max(1, Number.parseInt(params.get('pagina'),10) || 1));
+    const rows = db.prepare('SELECT id, curso, nota, comentario, gostou, sugestoes, data FROM respostas' + where + ' ORDER BY ' + orders[filtros.ordem] + ' LIMIT 50 OFFSET ?').all(...values,(pagina-1)*50);
     const total = db.prepare('SELECT COUNT(*) AS total FROM respostas').get().total;
-    html(res, 200, layout('Painel administrativo', renderRespostas(rows, total, found.csrf)));
+    const cursos = db.prepare('SELECT DISTINCT curso FROM respostas ORDER BY curso COLLATE NOCASE').all().map(r=>r.curso);
+    html(res, 200, layout('Painel administrativo', renderRespostas(rows, total, found.csrf, {filtros,cursos,encontrados,pagina,paginas,excluida:params.get('excluida')==='1'})));
     return true;
   }
   return {handle, requireAdmin};

@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="pt-BR">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Feira das Profissões · Sua opinião</title>
@@ -20,8 +21,10 @@ main{padding:0 16px}.edition{display:none}.layout{padding-top:18px;gap:4px}.intr
 .feedback-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:26px 0 13px}.feedback-heading h3{font-size:15px;margin:0}.feedback-heading>span{font-size:10px;color:#657694;border:1px solid #dce5f5;border-radius:20px;padding:5px 9px}.feedback-card{position:relative;border:1px solid var(--borda);border-radius:18px;padding:18px;margin:12px 0;background:var(--fundo);transition:border-color .2s,box-shadow .2s,transform .2s;overflow:hidden}.feedback-card:focus-within{border-color:var(--acento);box-shadow:0 0 0 3px var(--halo);transform:translateY(-2px)}.feedback-card.gostou{--borda:#bfdedb;--fundo:linear-gradient(125deg,#edf9f7,#f5fbff);--acento:#087f7b;--halo:#0d948815}.feedback-card.sugestoes{--borda:#d9cdf4;--fundo:linear-gradient(125deg,#f3eeff,#fff6ed);--acento:#7448c7;--halo:#7c3aed12}.feedback-title{display:flex;gap:11px;align-items:center}.feedback-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;background:white;border:1px solid var(--borda);font-size:22px;flex-shrink:0}.feedback-title label{color:var(--acento);font-weight:750;font-size:15px}.feedback-title p{font-size:11px;margin:3px 0 0;line-height:1.5}.feedback-card textarea{background:#ffffffd9;border-color:var(--borda);min-height:100px;margin:13px 0 7px;box-shadow:none;font-size:14px}.feedback-card textarea:focus{border-color:var(--acento)}.feedback-meta{display:flex;justify-content:space-between;gap:10px;font-size:10px;color:#5a6b89;line-height:1.6}.feedback-meta output{white-space:nowrap;font-variant-numeric:tabular-nums}.feedback-hints{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}.feedback-hints span{font-size:10px;border:1px solid var(--borda);background:#ffffff85;border-radius:20px;padding:4px 9px;color:var(--acento)}.feedback-note{font-size:11px;margin:12px 0 20px;color:#607392}@media(max-width:700px){.feedback-card{padding:15px}.feedback-card textarea{font-size:16px}.feedback-heading h3{font-size:14px}.feedback-heading>span{font-size:9px}.feedback-meta{font-size:10px}}@media(prefers-reduced-motion:reduce){.feedback-card{transition:none;transform:none}}
 </style>
 <link rel="stylesheet" href="/tema.css">
+</head>
+<body>
 <main>
-<header><div class="brand"><span class="marca" aria-hidden="true">&lt;/&gt;</span> FEIRA DAS PROFISSÕES</div><span class="edition">conectando futuros</span></header>
+<header><div class="brand"><span class="marca ds-logo" aria-hidden="true">DS</span><span class="brand-copy">FEIRA DAS PROFISSÕES<small>Desenvolvimento de Sistemas</small></span></div><span class="edition">conectando futuros</span></header>
 <div class="layout">
 <section class="intro" aria-labelledby="titulo">
 <div class="mobile-welcome"><span class="mobile-kicker">&lt; sua experiência importa /&gt;</span><h2>Visitou. Descobriu.<br>Conta pra gente! <span aria-hidden="true">✦</span></h2><p>Escolha o stand e toque na carinha que combina com sua experiência.</p><span class="mobile-tag">Um toque de opinião, muitas possibilidades.</span></div>
@@ -71,7 +74,7 @@ main{padding:0 16px}.edition{display:none}.layout{padding-top:18px;gap:4px}.intr
 </form>
 <section class="sucesso" id="sucesso" role="status" tabindex="-1" hidden><span class="check" aria-hidden="true">✓</span><h2>Sua opinião faz parte do futuro.</h2><p>Avaliação salva! Obrigado por ajudar nossa turma a construir uma feira melhor.</p><button id="outra">Avaliar outro stand <span class="arrow" aria-hidden="true">→</span></button></section>
 </section></div>
-<footer><span class="credit"><code aria-hidden="true">&lt;/&gt;</code> Desenvolvido com curiosidade e JavaScript</span><a href="/admin">Área da organização ↗</a></footer>
+<footer><span class="credit"><code aria-hidden="true">&lt;/&gt;</code> DS · Desenvolvimento de Sistemas</span><a href="/admin">Área da organização ↗</a></footer>
 </main>
 <script type="module">
 const $ = id => document.getElementById(id);
@@ -126,4 +129,5 @@ $('outra').addEventListener('click', () => {
   $('sucesso').hidden = true; $('form').hidden = false; $('curso').focus();
 });
 </script>
+</body>
 </html>

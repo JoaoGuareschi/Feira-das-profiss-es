@@ -4,7 +4,7 @@ import { spawn } from 'node:child_process';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { randomUUID } from 'node:crypto';
+import { randomUUID, createHash } from 'node:crypto';
 
 test('login, proteção dos dados, CSRF, escape de HTML, logout e limite de tentativas', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'feira-auth-'));
@@ -19,6 +19,16 @@ test('login, proteção dos dados, CSRF, escape de HTML, logout e limite de tent
     const request = (path, options = {}) => fetch(base + path, {redirect:'manual', ...options});
     const login = (password = 'senha-de-teste-123456789', origin = base) => request('/admin/login', {method:'POST', headers:{Origin:origin, 'Content-Type':'application/x-www-form-urlencoded'}, body:new URLSearchParams({email:'admin@example.test',password})});
     const loginPage = await request('/admin/login');
+    const publicPage = await request('/');
+    assert.equal(publicPage.headers.get('x-frame-options'),'DENY');
+    const csp = publicPage.headers.get('content-security-policy');
+    const source = (await publicPage.text()).match(/<script type="module">([\s\S]*?)<\/script>/)[1];
+    const digest = createHash('sha256').update(source.replace(/\r\n?/g,'\n')).digest('base64');
+    assert.ok(csp.includes(`'sha256-${digest}'`));
+    assert.ok(!csp.includes("script-src 'unsafe-inline'"));
+    for (const privatePath of ['/.env','/.env.example','/server.js','/admin.js','/.git/config','/dados/feira.sqlite']) assert.equal((await request(privatePath)).status,404);
+    assert.equal((await request('/api/respostas',{method:'POST',headers:{Origin:'https://externo.example','Content-Type':'application/json'},body:'{}'})).status,403);
+    assert.equal((await request('/api/respostas',{method:'POST',headers:{'Content-Type':'application/json'},body:'null'})).status,400);
     assert.equal(loginPage.headers.get('referrer-policy'), 'same-origin');
     assert.equal((await login(undefined, 'null')).status, 403);
     let result = await request('/admin');
@@ -64,6 +74,27 @@ test('login, proteção dos dados, CSRF, escape de HTML, logout e limite de tent
     const csrf = page.match(/name="csrf" value="([a-f0-9]+)"/)[1];
     result = await request('/api/exportar', {headers:{Cookie:cookie}}); assert.equal(result.status, 200);
     assert.ok((await result.text()).includes(cursos[0]));
+    const filtered = await (await request('/admin?q=perguntas&nota=4&ordem=antigas', {headers:{Cookie:cookie}})).text();
+    assert.ok(filtered.includes('1 de 2 avaliações'));
+    assert.ok(filtered.includes('Mais tempo para perguntas'));
+    assert.ok(!filtered.includes('&lt;script&gt;alert'));
+    const missing = await (await request('/admin?q=texto-inexistente', {headers:{Cookie:cookie}})).text();
+    assert.ok(missing.includes('Nenhuma avaliação encontrada'));
+    const sorted = await (await request('/admin?ordem=menor',{headers:{Cookie:cookie}})).text();
+    assert.ok(sorted.indexOf('Bom · 4/5') < sorted.indexOf('Excelente · 5/5'));
+    const deletePath = '/admin/excluir?id=' + newFeedback.id;
+    assert.equal((await request(deletePath)).status,303);
+    assert.equal((await request(deletePath,{headers:{Cookie:cookie}})).status,200);
+    assert.ok((await (await request('/api/exportar',{headers:{Cookie:cookie}})).text()).includes('Mais tempo para perguntas'));
+    const remove = (token, confirmed='sim', origin=base, auth=cookie) => request('/admin/excluir',{method:'POST',headers:{Cookie:auth,Origin:origin,'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({id:newFeedback.id,csrf:token,confirmar:confirmed})});
+    assert.equal((await remove(csrf,'sim',base,'')).status,303);
+    assert.equal((await remove('incorreto')).status,403);
+    assert.equal((await remove(csrf,'sim','https://externo.example')).status,403);
+    assert.equal((await remove(csrf,'')).status,400);
+    assert.equal((await remove(csrf)).status,303);
+    assert.equal((await request(deletePath,{headers:{Cookie:cookie}})).status,404);
+    assert.ok(!(await (await request('/api/exportar',{headers:{Cookie:cookie}})).text()).includes('Mais tempo para perguntas'));
+    assert.ok((await (await request('/admin/graficos',{headers:{Cookie:cookie}})).text()).includes('<td>1</td><td>5</td><td>1</td><td>1</td>'));
     const logout = token => request('/admin/logout', {method:'POST', headers:{Cookie:cookie, Origin:base,'Content-Type':'application/x-www-form-urlencoded'}, body:new URLSearchParams({csrf:token})});
     assert.equal((await logout('incorreto')).status, 403);
     result = await logout(csrf); assert.equal(result.status, 303); assert.match(result.headers.get('set-cookie'), /Max-Age=0/);
@@ -72,6 +103,9 @@ test('login, proteção dos dados, CSRF, escape de HTML, logout e limite de tent
     assert.equal((await request('/admin/graficos', {headers:{Cookie:cookie}})).status, 303);
     for (let i = 0; i < 5; i++) await login('incorreta');
     assert.equal((await login()).status, 429);
+    let limited;
+    for (let i=0;i<121;i++) limited=await request('/api/respostas',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
+    assert.equal(limited.status,429);
   } finally {
     const stopped = new Promise(resolve => server.once('exit', resolve));
     if (server.exitCode === null) { server.kill(); await stopped; }

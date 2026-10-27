@@ -4,6 +4,8 @@ Aplicação web em JavaScript para coletar avaliações dos stands e acompanhar 
 
 ## GitHub e hospedagem
 
+Consulte [SECURITY.md](SECURITY.md) para as proteções e limites do sistema. O projeto está marcado como `UNLICENSED`; mantenha o repositório privado para restringir o acesso ao código-fonte. Os arquivos executados no navegador continuam inspecionáveis.
+
 Este repositório contém o código do projeto. O GitHub Pages não executa o servidor Node.js nem o SQLite: para disponibilizar o questionário completo na internet, é necessária uma hospedagem Node.js 24+ com HTTPS e disco persistente.
 
 Depois de clonar ou baixar o código, copie `.env.example` para `.env`, configure suas credenciais e execute `npm start`. Não há dependências externas para instalar. O `.env`, as avaliações em `dados/` e arquivos SQLite não devem ser enviados ao GitHub. Cada instalação mantém seu próprio banco; baixar o código não copia respostas da feira.
@@ -17,7 +19,7 @@ Questionário em JavaScript para celular, com servidor Node.js e banco SQLite ce
 3. Abra um terminal nesta pasta e execute `npm start`. Não há dependências para instalar.
 4. No computador, acesse `http://localhost:3000`.
 
-O servidor precisa continuar ligado. No mesmo Wi-Fi, os celulares podem acessar o endereço IP do computador na porta 3000 se a rede e o firewall permitirem. Prefira publicar com HTTPS para o uso na feira.
+O servidor precisa continuar ligado. Por padrão, em desenvolvimento ele atende somente no próprio computador. Para testes pelo mesmo Wi-Fi, configure `HOST=0.0.0.0` e `APP_ORIGIN` com o endereço e porta usados, se a rede e o firewall permitirem. Use HTTPS para o acesso administrativo em rede compartilhada; prefira publicar o sistema para o uso na feira.
 
 Para visitantes em redes diferentes, hospede este servidor em um serviço Node.js com HTTPS e disco persistente. Não basta abrir o HTML nem usar hospedagem apenas de arquivos estáticos. O link público e o QR Code ainda não foram criados.
 
@@ -50,6 +52,10 @@ PORT=3000
 5. Acesse `http://localhost:3000/admin` e faça login. No painel, consulte as avaliações, clique em **Baixar todas em CSV** ou em **Sair**.
 
 ### Gráficos da feira
+
+No painel de avaliações, use a pesquisa para encontrar curso, elogio, sugestão ou comentário antigo. Combine filtros por curso e nota e ordene por data, nota ou nome do curso. Clique em **Aplicar pesquisa e filtros**. A lista tem 50 avaliações por página e os filtros são mantidos na navegação. **Limpar filtros** restaura a lista completa. A exportação CSV continua incluindo todas as avaliações, independentemente dos filtros.
+
+Para apagar uma resposta, clique em **Excluir avaliação** no cartão, confira o curso e a nota, marque a confirmação e clique em **Excluir definitivamente**. A operação é permanente; apenas abrir a confirmação não apaga nada. É necessário estar autenticado, e a requisição exige origem válida e token CSRF. A avaliação removida deixa de aparecer na exportação e nos gráficos ao atualizá-los.
 
 No painel, clique em **Ver gráficos e indicadores**, ou acesse `/admin/graficos` após entrar. A página é protegida pela mesma sessão administrativa e inclui pizzas de distribuição das notas e participação por curso, barras de quantidade e média por curso, indicadores e uma tabela detalhada. Usa todas as avaliações do banco, com cores fixas por curso. Sem respostas, mostra um estado vazio, sem dados fictícios.
 

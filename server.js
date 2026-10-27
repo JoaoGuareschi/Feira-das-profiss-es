@@ -6,6 +6,7 @@ import { resolve } from 'node:path';
 import { loadEnvFile } from 'node:process';
 import { createAdmin } from './admin.js';
 import { abrirChrome } from './abrir-chrome.js';
+import { createHash } from 'node:crypto';
 
 try { loadEnvFile(fileURLToPath(new URL('./.env', import.meta.url))); }
 catch (error) { if (error.code !== 'ENOENT') throw error; }
@@ -29,6 +30,20 @@ try {
   db.exec('COMMIT');
 } catch (error) { db.exec('ROLLBACK'); throw error; }
 const pagina = readFileSync(new URL('./index.html', import.meta.url));
+const scripts = [...pagina.toString('utf8').matchAll(/<script type="module">([\s\S]*?)<\/script>/g)];
+const scriptHashes = scripts.map(([,source]) => `'sha256-${createHash('sha256').update(source.replace(/\r\n?/g, '\n')).digest('base64')}'`).join(' ');
+const publicCsp = `default-src 'none'; script-src 'self' ${scriptHashes}; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'; object-src 'none'`;
+const appOrigin = new URL(process.env.APP_ORIGIN || `http://localhost:${process.env.PORT || 3000}`).origin;
+const submissionLimits = new Map();
+function allowSubmission(ip) {
+  const now = Date.now();
+  for (const [key, value] of submissionLimits) if (value.expires <= now) submissionLimits.delete(key);
+  if (!submissionLimits.has(ip)) {
+    if (submissionLimits.size >= 10000) return false;
+    submissionLimits.set(ip, {count:0,expires:now+10*60_000});
+  }
+  return ++submissionLimits.get(ip).count <= 120;
+}
 const admin = createAdmin(db);
 function json(res, status, data) {
   res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' });
@@ -38,6 +53,10 @@ http.createServer(async (req, res) => {
   try {
     res.setHeader('Cache-Control', 'no-store');
     res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+    res.setHeader('Content-Security-Policy', publicCsp);
+    if (process.env.NODE_ENV === 'production') res.setHeader('Strict-Transport-Security', 'max-age=31536000');
     // Preserva a origem em formulários locais para a validação contra CSRF.
     res.setHeader('Referrer-Policy', 'same-origin');
     const path = new URL(req.url, 'http://localhost').pathname;
@@ -52,6 +71,11 @@ http.createServer(async (req, res) => {
     }
     if (req.method === 'GET' && path === '/api/cursos') return json(res, 200, cursos);
     if (req.method === 'POST' && path === '/api/respostas') {
+      if ((req.headers.origin && req.headers.origin !== appOrigin) || req.headers['sec-fetch-site'] === 'cross-site') return json(res,403,{erro:'Origem não permitida.'});
+      if (!allowSubmission(req.socket.remoteAddress)) {
+        res.setHeader('Retry-After','600');
+        return json(res,429,{erro:'Muitos envios. Aguarde alguns minutos antes de tentar novamente.'});
+      }
       if (!req.headers['content-type']?.startsWith('application/json')) return json(res, 415, { erro: 'Formato inválido.' });
       let body = ''; let bytes = 0;
       for await (const chunk of req) {
@@ -61,6 +85,7 @@ http.createServer(async (req, res) => {
       }
       let dados;
       try { dados = JSON.parse(body); } catch { return json(res, 400, { erro: 'Resposta inválida.' }); }
+      if (!dados || typeof dados !== 'object' || Array.isArray(dados)) return json(res,400,{erro:'Resposta inválida.'});
       const { id, curso, nota, comentario = '', gostou = '', sugestoes = '' } = dados ?? {};
       if (typeof id !== 'string' || !/^[a-f0-9-]{36}$/i.test(id) || !cursos.includes(curso) || !Number.isInteger(nota) || nota < 1 || nota > 5 || [comentario, gostou, sugestoes].some(v => typeof v !== 'string' || v.length > 1000)) return json(res, 400, { erro: 'Confira o curso, a avaliação e os textos (máximo de 1.000 caracteres por campo).' });
       const anterior = db.prepare('SELECT curso, nota, comentario, gostou, sugestoes FROM respostas WHERE id = ?').get(id);
@@ -82,7 +107,7 @@ http.createServer(async (req, res) => {
     if (!res.headersSent) json(res, 500, { erro: 'Não foi possível salvar. Tente novamente.' });
     else res.end();
   }
-}).listen(Number(process.env.PORT || 3000), '0.0.0.0', () => {
+}).listen(Number(process.env.PORT || 3000), process.env.HOST || (process.env.NODE_ENV === 'production' ? '0.0.0.0' : '127.0.0.1'), () => {
   console.log('Feira disponível na porta ' + (process.env.PORT || 3000));
   if (process.env.OPEN_CHROME === '1') abrirChrome(`http://localhost:${process.env.PORT || 3000}`);
 });
