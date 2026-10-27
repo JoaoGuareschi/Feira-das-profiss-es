@@ -12,6 +12,7 @@ try { loadEnvFile(fileURLToPath(new URL('./.env', import.meta.url))); }
 catch (error) { if (error.code !== 'ENOENT') throw error; }
 
 const port = process.env.PORT || 10000;
+const host = '0.0.0.0';
 const cursos = JSON.parse(readFileSync(new URL('./cursos.json', import.meta.url), 'utf8'));
 if (!Array.isArray(cursos) || cursos.some(c => typeof c !== 'string' || !c.trim()) || new Set(cursos).size !== cursos.length) throw new Error('Confira a lista em cursos.json.');
 const pasta = process.env.DATA_DIR ? pathToFileURL(resolve(process.env.DATA_DIR) + '/') : new URL('./dados/', import.meta.url);
@@ -33,7 +34,7 @@ try {
 const pagina = readFileSync(new URL('./index.html', import.meta.url));
 const scripts = [...pagina.toString('utf8').matchAll(/<script type="module">([\s\S]*?)<\/script>/g)];
 const scriptHashes = scripts.map(([,source]) => `'sha256-${createHash('sha256').update(source.replace(/\r\n?/g, '\n')).digest('base64')}'`).join(' ');
-const publicCsp = `default-src 'none'; script-src 'self' ${scriptHashes}; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; font-src 'self' data:; worker-src 'self' blob:; manifest-src 'self';`;
+const publicCsp = `default-src 'none'; script-src 'self' ${scriptHashes}; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests`;
 const appOrigin = new URL(process.env.APP_ORIGIN || `http://localhost:${port}`).origin;
 const submissionLimits = new Map();
 function allowSubmission(ip) {
@@ -88,7 +89,7 @@ http.createServer(async (req, res) => {
       try { dados = JSON.parse(body); } catch { return json(res, 400, { erro: 'Resposta inválida.' }); }
       if (!dados || typeof dados !== 'object' || Array.isArray(dados)) return json(res,400,{erro:'Resposta inválida.'});
       const { id, curso, nota, comentario = '', gostou = '', sugestoes = '' } = dados ?? {};
-      if (typeof id !== 'string' || !/^[a-f0-9-]{36}$/i.test(id) || !cursos.includes(curso) || !Number.isInteger(nota) || nota < 1 || nota > 5 || [comentario, gostou, sugestoes].some(v => typeof v !== 'string') || comentario.length > 1000 || gostou.length > 1000 || sugestoes.length > 1000) return json(res,400,{erro:'Dados inválidos.'});
+      if (typeof id !== 'string' || !/^[a-f0-9-]{36}$/i.test(id) || !cursos.includes(curso) || !Number.isInteger(nota) || nota < 1 || nota > 5 || [comentario, gostou, sugestoes].some(v => typeof v !== 'string')) return json(res, 400, { erro: 'Dados inválidos.' });
       const anterior = db.prepare('SELECT curso, nota, comentario, gostou, sugestoes FROM respostas WHERE id = ?').get(id);
       if (anterior && (anterior.curso !== curso || anterior.nota !== nota || anterior.comentario !== comentario.trim() || anterior.gostou !== gostou.trim() || anterior.sugestoes !== sugestoes.trim())) return json(res, 200, { salvo: true });
       db.prepare('INSERT OR IGNORE INTO respostas (id, curso, nota, comentario, data, gostou, sugestoes) VALUES (?, ?, ?, ?, ?, ?, ?)').run(id, curso, nota, comentario.trim(), new Date().toISOString(), gostou.trim(), sugestoes.trim());
@@ -96,7 +97,7 @@ http.createServer(async (req, res) => {
     }
     if (req.method === 'GET' && path === '/api/exportar') {
       if (!admin.requireAdmin(req, res, true)) return;
-      const cell = value => '"' + String(value).replace(/^(\s*[=+@\-|[\t\r\n])/, "'$&").replaceAll('"', '""') + '"';
+      const cell = value => '"' + String(value).replace(/^(\s*[=+@\-|\[\t\r\n])/, "'$&").replaceAll('"', '""') + '"';
       const rows = db.prepare('SELECT curso, nota, comentario, gostou, sugestoes, data FROM respostas ORDER BY data').all();
       const csv = '\uFEFF' + [['Curso', 'Nota', 'O que gostou', 'Sugestões', 'Comentário antigo', 'Data (UTC)'], ...rows.map(r => [r.curso, r.nota, r.gostou, r.sugestoes, r.comentario, r.data])].map(row => row.map(cell).join(',')).join('\n');
       res.writeHead(200, { 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': 'attachment; filename="respostas.csv"', 'Cache-Control': 'no-store' });
@@ -108,7 +109,7 @@ http.createServer(async (req, res) => {
     if (!res.headersSent) json(res, 500, { erro: 'Não foi possível salvar. Tente novamente.' });
     else res.end();
   }
-}).listen(Number(port), process.env.HOST || (process.env.NODE_ENV === 'production' ? '0.0.0.0' : '127.0.0.1'), () => {
+}).listen(Number(port), host, () => {
   console.log('Feira disponível na porta ' + port);
   if (process.env.OPEN_CHROME === '1') abrirChrome(`http://localhost:${port}`);
 });
