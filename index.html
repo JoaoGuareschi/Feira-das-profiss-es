@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Feira das Profissões · Sua opinião</title>
-<script src="/tema.js"></script>
-<style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Feira das Profissões · Sua opinião</title>
+  <script src="/tema.js"></script>
+  <style>
 *{box-sizing:border-box}html{color-scheme:light}body{margin:0;background:#f4f7fe;color:#14274a;font:16px 'Segoe UI',system-ui,sans-serif;-webkit-font-smoothing:antialiased}body:before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 0 15%,#dbe8ff 0,transparent 50%),radial-gradient(ellipse at 100% 80%,#e4ecff 0,transparent 50%);z-index:-1}main{max-width:1180px;margin:auto;padding:0 32px}header{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:94px;border-bottom:1px solid #dbe4f4}.brand{display:flex;align-items:center;gap:12px;font-weight:750;font-size:15px;letter-spacing:-.3px}.marca{display:grid;place-items:center;width:44px;height:44px;background:#235ce6;color:white;border-radius:14px;font:700 19px ui-monospace,monospace;box-shadow:0 6px 16px #235ce624}.edition{font:12px ui-monospace,monospace;color:#52719c;border:1px solid #d4dff3;border-radius:30px;padding:8px 12px}.layout{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:start;padding:64px 0}.intro{padding:25px 0;animation:entrar .6s ease both}.eyebrow{display:inline-flex;align-items:center;gap:9px;background:#e4edff;color:#2156c5;border:1px solid #cbdcff;border-radius:30px;font-size:12px;font-weight:700;padding:8px 13px;letter-spacing:1px}.dot{width:7px;height:7px;background:#3572f6;border-radius:50%;box-shadow:0 0 0 4px #3572f61a}h1{font-size:clamp(38px,4.5vw,62px);line-height:1.08;letter-spacing:-2.7px;margin:25px 0 22px;font-weight:750}h1 span{color:#235ce6}p{line-height:1.75;color:#5b6d8b}.intro>p{max-width:420px;font-size:17px}.features{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:#49658c;margin:24px 0 32px}.features span{display:flex;gap:7px;align-items:center}.features b{color:#235ce6}.terminal{max-width:410px;border:1px solid #263b61;background:#101e37;border-radius:18px;overflow:hidden;box-shadow:0 18px 35px #142d5512;transform:rotate(-1deg)}.terminal-top{display:flex;align-items:center;gap:6px;padding:13px 16px;border-bottom:1px solid #ffffff12;background:#ffffff03}.terminal-top i{height:7px;width:7px;border-radius:50%;background:#53698a}.terminal-top i:first-child{background:#6895fa}.terminal-top span{margin-left:auto;color:#9eb1ce;font:11px ui-monospace,monospace}.terminal pre{margin:0;padding:22px;color:#d7e5ff;font:13px/1.9 ui-monospace,monospace;white-space:pre-wrap}.terminal .blue{color:#85b7ff}.terminal .cyan{color:#86e2e1}.terminal .comment{color:#9aaecb}.cursor{display:inline-block;background:#8cb7ff;width:7px;height:13px;vertical-align:middle;animation:piscar 1.4s step-end 4}.form-area{min-width:0}form,.sucesso{background:#fff;border:1px solid #dce5f5;border-radius:24px;padding:30px;box-shadow:0 16px 50px #234d9a09;animation:entrar .6s .1s ease both}.card-head{border-bottom:1px solid #eaf0fa;padding-bottom:20px;margin-bottom:24px;display:flex;align-items:center;gap:13px}.card-icon{display:grid;place-items:center;background:#eaf1ff;color:#235ce6;width:42px;height:42px;border-radius:12px;font:600 20px ui-monospace,monospace}.card-head h2{font-size:21px;letter-spacing:-.6px;margin:0 0 4px}.card-head p{font-size:13px;margin:0}.step{display:inline-grid;place-items:center;font:11px ui-monospace,monospace;color:#3464c9;background:#edf3ff;width:25px;height:25px;border-radius:8px;margin-right:8px}label,legend{font-size:14px;font-weight:650;line-height:1.5}select,textarea{width:100%;font:inherit;font-size:14px;border:1px solid #cbd8ed;border-radius:12px;padding:14px;margin:10px 0 24px;background:#fbfcff;color:#20385f;transition:border-color .2s,box-shadow .2s}select{min-height:50px}textarea{resize:vertical;min-height:110px;margin-bottom:18px}textarea::placeholder{color:#7384a0}select:focus,textarea:focus{border-color:#5284ef;box-shadow:0 0 0 4px #235ce610}fieldset{border:0;padding:0;margin:0 0 26px;min-width:0}legend{margin-bottom:14px}.notas{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.notas label{position:relative;cursor:pointer;text-align:center;border:1px solid #d4dff2;background:#fafcff;border-radius:13px;padding:12px 3px;transition:background .2s,transform .2s,border-color .2s,box-shadow .2s}.notas label:has(input:checked){background:#eaf1ff;color:#164cc7;border-color:#235ce6;box-shadow:0 0 0 1px #235ce6;transform:translateY(-3px)}.notas input{display:block;margin:0 auto 8px;accent-color:#235ce6;width:15px;height:15px}.notas strong{display:block;font-size:20px}.escala{display:flex;justify-content:space-between;font-size:11px;margin-top:11px;color:#617595}button{display:flex;align-items:center;justify-content:center;gap:12px;background:#235ce6;color:white;border:0;padding:16px 20px;width:100%;border-radius:12px;font:650 15px 'Segoe UI',system-ui;cursor:pointer;box-shadow:0 5px 14px #235ce620;transition:background .2s,transform .2s,box-shadow .2s}button .arrow{transition:transform .2s}button:active{transform:scale(.985)}button:disabled{opacity:.6;cursor:wait}:focus-visible{outline:3px solid #497ef1;outline-offset:4px}small{display:block;line-height:1.65;font-size:12px;color:#657694}.optional{font-size:11px;font-weight:400;color:#6a7e9d;margin-left:5px}.privacy{display:flex;gap:8px;justify-content:center;text-align:center;margin-top:16px;font-size:11px}.privacy span{color:#3765c7}#status{color:#a42636;font-size:13px;margin:12px 0}#status:empty,#carregamento:empty{display:none}.sucesso{text-align:center;padding:48px 30px}.check{display:grid;place-items:center;background:#e9f1ff;color:#235ce6;border-radius:50%;width:70px;height:70px;margin:0 auto 24px;font-size:32px;animation:entrar .4s ease both}.sucesso h2{letter-spacing:-.8px;font-size:27px}.sucesso p{margin-bottom:28px}footer{border-top:1px solid #dbe4f4;display:flex;justify-content:space-between;gap:20px;padding:23px 0 30px;font-size:12px;color:#687e9e}footer a{color:#48668f;text-decoration:none}footer a:hover{text-decoration:underline}.credit{display:flex;align-items:center;gap:7px}.credit code{color:#235ce6;font-size:14px}[hidden]{display:none!important}@keyframes entrar{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}@keyframes piscar{50%{opacity:0}}@media(hover:hover){button:hover:not(:disabled){background:#184ac6;box-shadow:0 8px 20px #235ce632}button:hover .arrow{transform:translateX(4px)}.notas label:hover{background:#edf3ff;border-color:#93b2f4;transform:translateY(-3px)}}@media(max-width:900px){.layout{gap:32px}h1{font-size:46px;letter-spacing:-2px}.terminal pre{font-size:12px}form{padding:24px}}@media(max-width:700px){main{padding:0 20px}header{min-height:78px}.edition{font-size:10px;padding:7px 9px}.brand{font-size:12px;gap:9px}.marca{width:36px;height:36px;font-size:16px}.layout{grid-template-columns:1fr;gap:16px;padding:22px 0 32px}.intro{padding:14px 0}h1{font-size:44px;margin:18px 0}h1 br{display:none}.intro>p{font-size:15px;margin-bottom:16px;max-width:none}.features{margin:18px 0 0;gap:15px}.terminal{display:none}form,.sucesso{padding:23px;border-radius:20px}footer{flex-wrap:wrap;gap:12px;font-size:11px}.credit{font-size:11px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 .mobile-welcome,.mobile-facts,.mobile-progress,.mobile-tip{display:none}
 @keyframes pular-emoji{0%,45%,100%{transform:translateY(0) scale(1)}18%{transform:translateY(-9px) rotate(-7deg) scale(1.08)}30%{transform:translateY(0) scale(1.05,.95)}}
@@ -20,20 +20,23 @@ main{padding:0 16px}.edition{display:none}.layout{padding-top:18px;gap:4px}.intr
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
 .feedback-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:26px 0 13px}.feedback-heading h3{font-size:15px;margin:0}.feedback-heading>span{font-size:10px;color:#657694;border:1px solid #dce5f5;border-radius:20px;padding:5px 9px}.feedback-card{position:relative;border:1px solid var(--borda);border-radius:18px;padding:18px;margin:12px 0;background:var(--fundo);transition:border-color .2s,box-shadow .2s,transform .2s;overflow:hidden}.feedback-card:focus-within{border-color:var(--acento);box-shadow:0 0 0 3px var(--halo);transform:translateY(-2px)}.feedback-card.gostou{--borda:#bfdedb;--fundo:linear-gradient(125deg,#edf9f7,#f5fbff);--acento:#087f7b;--halo:#0d948815}.feedback-card.sugestoes{--borda:#d9cdf4;--fundo:linear-gradient(125deg,#f3eeff,#fff6ed);--acento:#7448c7;--halo:#7c3aed12}.feedback-title{display:flex;gap:11px;align-items:center}.feedback-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;background:white;border:1px solid var(--borda);font-size:22px;flex-shrink:0}.feedback-title label{color:var(--acento);font-weight:750;font-size:15px}.feedback-title p{font-size:11px;margin:3px 0 0;line-height:1.5}.feedback-card textarea{background:#ffffffd9;border-color:var(--borda);min-height:100px;margin:13px 0 7px;box-shadow:none;font-size:14px}.feedback-card textarea:focus{border-color:var(--acento)}.feedback-meta{display:flex;justify-content:space-between;gap:10px;font-size:10px;color:#5a6b89;line-height:1.6}.feedback-meta output{white-space:nowrap;font-variant-numeric:tabular-nums}.feedback-hints{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}.feedback-hints span{font-size:10px;border:1px solid var(--borda);background:#ffffff85;border-radius:20px;padding:4px 9px;color:var(--acento)}.feedback-note{font-size:11px;margin:12px 0 20px;color:#607392}@media(max-width:700px){.feedback-card{padding:15px}.feedback-card textarea{font-size:16px}.feedback-heading h3{font-size:14px}.feedback-heading>span{font-size:9px}.feedback-meta{font-size:10px}}@media(prefers-reduced-motion:reduce){.feedback-card{transition:none;transform:none}}
 </style>
-<link rel="stylesheet" href="/tema.css">
+  <link rel="stylesheet" href="/tema.css">
 </head>
 <body>
-<main>
-<header><div class="brand"><span class="marca ds-logo" aria-hidden="true">DS</span><span class="brand-copy">FEIRA DAS PROFISSÕES<small>Desenvolvimento de Sistemas</small></span></div><span class="edition">conectando futuros</span></header>
-<div class="layout">
-<section class="intro" aria-labelledby="titulo">
-<div class="mobile-welcome"><span class="mobile-kicker">&lt; sua experiência importa /&gt;</span><h2>Visitou. Descobriu.<br>Conta pra gente! <span aria-hidden="true">✦</span></h2><p>Escolha o stand e toque na carinha que combina com sua experiência.</p><span class="mobile-tag">Um toque de opinião, muitas possibilidades.</span></div>
-<div class="mobile-facts" aria-label="Sobre a avaliação"><div class="fact"><b id="total-cursos">—</b><span>cursos para explorar</span></div><div class="fact"><b>2</b><span>escolhas obrigatórias</span></div><div class="fact"><b id="total-visita">0</b><span>envios nesta visita</span></div></div>
-<span class="eyebrow"><span class="dot" aria-hidden="true"></span> EXPLORE. DESCUBRA. CONECTE.</span>
-<h1 id="titulo">O futuro começa<br> com uma <span>boa<br> experiência.</span></h1>
-<p>Você explorou novas possibilidades. Agora, conte como foi! Sua opinião ajuda nossa turma a construir uma feira ainda melhor.</p>
-<div class="features"><span><b aria-hidden="true">✓</b> Sem identificação</span><span><b aria-hidden="true">✓</b> Sua opinião faz diferença</span></div>
-<div class="terminal" aria-hidden="true"><div class="terminal-top"><i></i><i></i><i></i><span>desenvolvendo-futuros.js</span></div><pre><span class="comment">// Toda ideia começa com uma conexão.</span>
+  <main>
+    <header>
+      <div class="brand"><span class="marca ds-logo" aria-hidden="true">DS</span><span class="brand-copy">FEIRA DAS PROFISSÕES<small>Desenvolvimento de Sistemas</small></span></div>
+      <span class="edition">conectando futuros</span>
+    </header>
+    <div class="layout">
+      <section class="intro" aria-labelledby="titulo">
+        <div class="mobile-welcome"><span class="mobile-kicker">&lt; sua experiência importa /&gt;</span><h2>Visitou. Descobriu.<br>Conta pra gente! <span aria-hidden="true">✦</span></h2><p>Escolha o stand e toque na carinha que combina com sua experiência.</p><span class="mobile-tag">Um toque de opinião, muitas possibilidades.</span></div>
+        <div class="mobile-facts" aria-label="Sobre a avaliação"><div class="fact"><b id="total-cursos">—</b><span>cursos para explorar</span></div><div class="fact"><b>2</b><span>escolhas obrigatórias</span></div><div class="fact"><b id="total-visita">0</b><span>envios nesta visita</span></div></div>
+        <span class="eyebrow"><span class="dot" aria-hidden="true"></span> EXPLORE. DESCUBRA. CONECTE.</span>
+        <h1 id="titulo">O futuro começa<br> com uma <span>boa<br> experiência.</span></h1>
+        <p>Você explorou novas possibilidades. Agora, conte como foi! Sua opinião ajuda nossa turma a construir uma feira ainda melhor.</p>
+        <div class="features"><span><b aria-hidden="true">✓</b> Sem identificação</span><span><b aria-hidden="true">✓</b> Sua opinião faz diferença</span></div>
+        <div class="terminal" aria-hidden="true"><div class="terminal-top"><i></i><i></i><i></i><span>desenvolvendo-futuros.js</span></div><pre><span class="comment">// Toda ideia começa com uma conexão.</span>
 <span class="blue">const</span> futuro = {
   curiosidade: <span class="cyan">"explorar"</span>,
   próximoPasso: <span class="cyan">"descobrir"</span>,
@@ -41,93 +44,101 @@ main{padding:0 16px}.edition{display:none}.layout{padding-top:18px;gap:4px}.intr
 };
 
 <span class="blue">construir</span>(futuro); <span class="cursor"></span></pre></div>
-</section>
-<section class="form-area" aria-label="Avaliação do stand">
-<p id="carregamento" role="status">Carregando os stands…</p>
-<form id="form" hidden>
-<div class="card-head"><span class="card-icon" aria-hidden="true">↗</span><div><h2>Conte sua experiência</h2><p>Uma visita, uma descoberta, uma opinião.</p></div></div>
-<div class="mobile-progress"><div class="progress-top"><span id="progresso-texto">Comece escolhendo um stand</span><span id="progresso-contagem">0 de 2</span></div><div class="progress-track" id="progresso" role="progressbar" aria-label="Escolhas obrigatórias preenchidas" aria-valuemin="0" aria-valuemax="2" aria-valuenow="0"><span class="progress-fill" id="progresso-barra"></span></div></div>
-<label for="curso"><span class="step" aria-hidden="true">01</span> Qual stand você visitou?</label>
-<select id="curso" required><option value="">Selecione o curso</option></select>
-<fieldset><legend><span class="step" aria-hidden="true">02</span><span id="pergunta">O que achou do stand?</span></legend>
-<div class="notas">
-<label title="Muito ruim"><input type="radio" name="nota" value="1" aria-label="Muito ruim" required><strong aria-hidden="true">😞</strong></label>
-<label title="Ruim"><input type="radio" name="nota" value="2" aria-label="Ruim"><strong aria-hidden="true">🙁</strong></label>
-<label title="Regular"><input type="radio" name="nota" value="3" aria-label="Regular"><strong aria-hidden="true">😐</strong></label>
-<label title="Bom"><input type="radio" name="nota" value="4" aria-label="Bom"><strong aria-hidden="true">🙂</strong></label>
-<label title="Excelente"><input type="radio" name="nota" value="5" aria-label="Excelente"><strong aria-hidden="true">🤩</strong></label>
-</div><div class="escala"><span>Muito ruim</span><span>Excelente</span></div></fieldset>
-<p class="mobile-tip" id="dica-nota" aria-live="polite"><span aria-hidden="true">☝️</span> Toque em uma carinha para avaliar.</p>
-<div class="feedback-heading"><h3><span class="step" aria-hidden="true">03</span> Sua experiência, em palavras</h3><span>DOIS CAMPOS OPCIONAIS</span></div>
-<div class="feedback-card gostou"><div class="feedback-title"><span class="feedback-icon" aria-hidden="true">✨</span><div><label for="gostou">O que você gostou?</label><p>Qual detalhe marcou sua visita?</p></div></div>
-<div class="feedback-hints" aria-hidden="true"><span>🎤 Apresentação</span><span>🤝 Atendimento</span><span>🧪 Atividades</span></div>
-<textarea id="gostou" maxlength="1000" rows="3" aria-describedby="gostou-ajuda" placeholder="Conte o que chamou sua atenção no stand…"></textarea>
-<div class="feedback-meta"><span id="gostou-ajuda">Vale um detalhe ou uma descoberta!</span><output id="gostou-contagem" for="gostou" aria-label="Caracteres no campo o que gostou">0 / 1000</output></div></div>
-<div class="feedback-card sugestoes"><div class="feedback-title"><span class="feedback-icon" aria-hidden="true">💡</span><div><label for="sugestoes">Sugestões para melhorar</label><p>Sua ideia pode transformar a próxima feira.</p></div></div>
-<div class="feedback-hints" aria-hidden="true"><span>🛠️ Melhorias</span><span>🚀 Novas ideias</span><span>🎯 Organização</span></div>
-<textarea id="sugestoes" maxlength="1000" rows="3" aria-describedby="sugestoes-ajuda" placeholder="O que você mudaria ou gostaria de ver na próxima vez?"></textarea>
-<div class="feedback-meta"><span id="sugestoes-ajuda">Toda sugestão construtiva é bem-vinda.</span><output id="sugestoes-contagem" for="sugestoes" aria-label="Caracteres no campo sugestões">0 / 1000</output></div></div>
-<p class="feedback-note">🔒 Não inclua nomes, telefones ou outros dados pessoais.</p>
-<button id="enviar"><span id="enviar-texto">Enviar avaliação</span><span class="arrow" aria-hidden="true">→</span></button>
-<p id="status" role="status" aria-live="polite"></p>
-<small class="privacy"><span aria-hidden="true">◇</span> Salvamos apenas curso, nota, seus textos opcionais e data.</small>
-</form>
-<section class="sucesso" id="sucesso" role="status" tabindex="-1" hidden><span class="check" aria-hidden="true">✓</span><h2>Sua opinião faz parte do futuro.</h2><p>Avaliação salva! Obrigado por ajudar nossa turma a construir uma feira melhor.</p><button id="outra">Avaliar outro stand <span class="arrow" aria-hidden="true">→</span></button></section>
-</section></div>
-<footer><span class="credit"><code aria-hidden="true">&lt;/&gt;</code> DS · Desenvolvimento de Sistemas</span><a href="/admin">Área da organização ↗</a></footer>
-</main>
-<script type="module">
-const $ = id => document.getElementById(id);
-const novoId = () => typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, c => (Number(c) ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> Number(c) / 4).toString(16));
-let id = novoId();
-let enviosNestaVisita = 0;
-function atualizarContadores() {
-  for (const campo of ['gostou', 'sugestoes']) $(campo + '-contagem').textContent = `${$(campo).value.length} / 1000`;
-}
-for (const campo of ['gostou', 'sugestoes']) $(campo).addEventListener('input', atualizarContadores);
-const descricoes = ['Muito ruim', 'Ruim', 'Regular', 'Bom', 'Excelente'];
-function atualizarProgresso() {
-  const nota = $('form').querySelector('input[name="nota"]:checked');
-  const total = Number(Boolean($('curso').value)) + Number(Boolean(nota));
-  $('progresso').setAttribute('aria-valuenow', String(total));
-  $('progresso-barra').style.width = `${total * 50}%`;
-  $('progresso-contagem').textContent = `${total} de 2`;
-  $('progresso-texto').textContent = total === 2 ? 'Tudo pronto! Pode enviar.' : !$('curso').value ? 'Escolha o stand que você visitou' : 'Agora escolha sua carinha';
-  $('dica-nota').textContent = nota ? `${descricoes[Number(nota.value) - 1]} — você pode mudar antes de enviar.` : '☝️ Toque em uma carinha para avaliar.';
-}
-$('form').addEventListener('change', atualizarProgresso);
-try {
-  const resposta = await fetch('/api/cursos');
-  if (!resposta.ok) throw new Error();
-  const cursos = await resposta.json();
-  $('total-cursos').textContent = String(cursos.length);
-  for (const curso of cursos) $('curso').add(new Option(curso, curso));
-  $('carregamento').textContent = cursos.length ? '' : 'A feira está sendo preparada. Os cursos serão adicionados em breve!';
-  $('form').hidden = !cursos.length;
-} catch { $('carregamento').textContent = 'Não foi possível carregar os stands. Atualize a página para tentar novamente.'; }
-$('curso').addEventListener('change', () => { $('pergunta').textContent = $('curso').value ? `O que achou do stand de ${$('curso').value}?` : 'O que achou do stand?'; });
-$('form').addEventListener('submit', async event => {
-  event.preventDefault();
-  $('enviar').disabled = true;
-  $('enviar-texto').textContent = 'Salvando…';
-  $('status').textContent = 'Salvando…';
-  try {
-    const resposta = await fetch('/api/respostas', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id, curso:$('curso').value, nota:Number(new FormData($('form')).get('nota')), gostou:$('gostou').value, sugestoes:$('sugestoes').value})});
-    const resultado = await resposta.json();
-    if (!resposta.ok) throw new Error(resultado.erro);
-    enviosNestaVisita++;
-    $('total-visita').textContent = String(enviosNestaVisita);
-    $('form').hidden = true; $('sucesso').hidden = false; $('sucesso').focus();
-  } catch(error) { $('status').textContent = error.message === 'Failed to fetch' ? 'Sem conexão. Sua resposta ainda não foi confirmada. Tente enviar novamente.' : (error.message || 'Erro ao salvar. Tente novamente.'); }
-  finally { $('enviar').disabled = false; $('enviar-texto').textContent = 'Enviar avaliação'; }
-});
-$('outra').addEventListener('click', () => {
-  id = novoId(); $('form').reset(); $('status').textContent = '';
-  $('pergunta').textContent = 'O que achou do stand?';
-  atualizarProgresso();
-  atualizarContadores();
-  $('sucesso').hidden = true; $('form').hidden = false; $('curso').focus();
-});
-</script>
+      </section>
+      <section class="form-area" aria-label="Avaliação do stand">
+        <p id="carregamento" role="status">Carregando os stands…</p>
+        <form id="form" hidden>
+          <div class="card-head"><span class="card-icon" aria-hidden="true">↗</span><div><h2>Conte sua experiência</h2><p>Uma visita, uma descoberta, uma opinião.</p></div></div>
+          <div class="mobile-progress"><div class="progress-top"><span id="progresso-texto">Comece escolhendo um stand</span><span id="progresso-contagem">0 de 2</span></div><div class="progress-track" id="progresso" role="progressbar" aria-label="Escolhas obrigatórias preenchidas" aria-valuemin="0" aria-valuemax="2" aria-valuenow="0"><span class="progress-fill" id="progresso-barra"></span></div></div>
+          <label for="curso"><span class="step" aria-hidden="true">01</span> Qual stand você visitou?</label>
+          <select id="curso" required><option value="">Selecione o curso</option></select>
+          <fieldset>
+            <legend><span class="step" aria-hidden="true">02</span><span id="pergunta">O que achou do stand?</span></legend>
+            <div class="notas">
+              <label title="Muito ruim"><input type="radio" name="nota" value="1" aria-label="Muito ruim" required><strong aria-hidden="true">😞</strong></label>
+              <label title="Ruim"><input type="radio" name="nota" value="2" aria-label="Ruim"><strong aria-hidden="true">🙁</strong></label>
+              <label title="Regular"><input type="radio" name="nota" value="3" aria-label="Regular"><strong aria-hidden="true">😐</strong></label>
+              <label title="Bom"><input type="radio" name="nota" value="4" aria-label="Bom"><strong aria-hidden="true">🙂</strong></label>
+              <label title="Excelente"><input type="radio" name="nota" value="5" aria-label="Excelente"><strong aria-hidden="true">🤩</strong></label>
+            </div>
+            <div class="escala"><span>Muito ruim</span><span>Excelente</span></div>
+          </fieldset>
+          <p class="mobile-tip" id="dica-nota" aria-live="polite"><span aria-hidden="true">☝️</span> Toque em uma carinha para avaliar.</p>
+          <div class="feedback-heading"><h3><span class="step" aria-hidden="true">03</span> Sua experiência, em palavras</h3><span>DOIS CAMPOS OPCIONAIS</span></div>
+          <div class="feedback-card gostou">
+            <div class="feedback-title"><span class="feedback-icon" aria-hidden="true">✨</span><div><label for="gostou">O que você gostou?</label><p>Qual detalhe marcou sua visita?</p></div></div>
+            <div class="feedback-hints" aria-hidden="true"><span>🎤 Apresentação</span><span>🤝 Atendimento</span><span>🧪 Atividades</span></div>
+            <textarea id="gostou" maxlength="1000" rows="3" aria-describedby="gostou-ajuda" placeholder="Conte o que chamou sua atenção no stand…"></textarea>
+            <div class="feedback-meta"><span id="gostou-ajuda">Vale um detalhe ou uma descoberta!</span><output id="gostou-contagem" for="gostou" aria-label="Caracteres no campo o que gostou">0 / 1000</output></div>
+          </div>
+          <div class="feedback-card sugestoes">
+            <div class="feedback-title"><span class="feedback-icon" aria-hidden="true">💡</span><div><label for="sugestoes">Sugestões para melhorar</label><p>Sua ideia pode transformar a próxima feira.</p></div></div>
+            <div class="feedback-hints" aria-hidden="true"><span>🛠️ Melhorias</span><span>🚀 Novas ideias</span><span>🎯 Organização</span></div>
+            <textarea id="sugestoes" maxlength="1000" rows="3" aria-describedby="sugestoes-ajuda" placeholder="O que você mudaria ou gostaria de ver na próxima vez?"></textarea>
+            <div class="feedback-meta"><span id="sugestoes-ajuda">Toda sugestão construtiva é bem-vinda.</span><output id="sugestoes-contagem" for="sugestoes" aria-label="Caracteres no campo sugestões">0 / 1000</output></div>
+          </div>
+          <p class="feedback-note">🔒 Não inclua nomes, telefones ou outros dados pessoais.</p>
+          <button id="enviar"><span id="enviar-texto">Enviar avaliação</span><span class="arrow" aria-hidden="true">→</span></button>
+          <p id="status" role="status" aria-live="polite"></p>
+          <small class="privacy"><span aria-hidden="true">◇</span> Salvamos apenas curso, nota, seus textos opcionais e data.</small>
+        </form>
+        <section class="sucesso" id="sucesso" role="status" tabindex="-1" hidden><span class="check" aria-hidden="true">✓</span><h2>Sua opinião faz parte do futuro.</h2><p>Avaliação salva! Obrigado por ajudar nossa turma a construir uma feira melhor.</p><button id="outra">Avaliar outro stand <span class="arrow" aria-hidden="true">→</span></button></section>
+      </section>
+    </div>
+    <footer><span class="credit"><code aria-hidden="true">&lt;/&gt;</code> DS · Desenvolvimento de Sistemas</span><a href="/admin">Área da organização ↗</a></footer>
+  </main>
+  <script type="module">
+    const $ = id => document.getElementById(id);
+    const novoId = () => typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, c => (Number(c) ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> Number(c) / 4).toString(16));
+    let id = novoId();
+    let enviosNestaVisita = 0;
+    function atualizarContadores() {
+      for (const campo of ['gostou', 'sugestoes']) $(campo + '-contagem').textContent = `${$(campo).value.length} / 1000`;
+    }
+    for (const campo of ['gostou', 'sugestoes']) $(campo).addEventListener('input', atualizarContadores);
+    const descricoes = ['Muito ruim', 'Ruim', 'Regular', 'Bom', 'Excelente'];
+    function atualizarProgresso() {
+      const nota = $('form').querySelector('input[name="nota"]:checked');
+      const total = Number(Boolean($('curso').value)) + Number(Boolean(nota));
+      $('progresso').setAttribute('aria-valuenow', String(total));
+      $('progresso-barra').style.width = `${total * 50}%`;
+      $('progresso-contagem').textContent = `${total} de 2`;
+      $('progresso-texto').textContent = total === 2 ? 'Tudo pronto! Pode enviar.' : !$('curso').value ? 'Escolha o stand que você visitou' : 'Agora escolha sua carinha';
+      $('dica-nota').textContent = nota ? `${descricoes[Number(nota.value) - 1]} — você pode mudar antes de enviar.` : '☝️ Toque em uma carinha para avaliar.';
+    }
+    $('form').addEventListener('change', atualizarProgresso);
+    try {
+      const resposta = await fetch('/api/cursos');
+      if (!resposta.ok) throw new Error();
+      const cursos = await resposta.json();
+      $('total-cursos').textContent = String(cursos.length);
+      for (const curso of cursos) $('curso').add(new Option(curso, curso));
+      $('carregamento').textContent = cursos.length ? '' : 'A feira está sendo preparada. Os cursos serão adicionados em breve!';
+      $('form').hidden = !cursos.length;
+    } catch { $('carregamento').textContent = 'Não foi possível carregar os stands. Atualize a página para tentar novamente.'; }
+    $('curso').addEventListener('change', () => { $('pergunta').textContent = $('curso').value ? `O que achou do stand de ${$('curso').value}?` : 'O que achou do stand?'; });
+    $('form').addEventListener('submit', async event => {
+      event.preventDefault();
+      $('enviar').disabled = true;
+      $('enviar-texto').textContent = 'Salvando…';
+      $('status').textContent = 'Salvando…';
+      try {
+        const resposta = await fetch('/api/respostas', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id, curso:$('curso').value, nota:Number(new FormData($('form')).get('nota')), gostou:$('gostou').value, sugestoes:$('sugestoes').value})});
+        const resultado = await resposta.json();
+        if (!resposta.ok) throw new Error(resultado.erro);
+        enviosNestaVisita++;
+        $('total-visita').textContent = String(enviosNestaVisita);
+        $('form').hidden = true; $('sucesso').hidden = false; $('sucesso').focus();
+      } catch(error) { $('status').textContent = error.message === 'Failed to fetch' ? 'Sem conexão. Sua resposta ainda não foi confirmada. Tente enviar novamente.' : (error.message || 'Erro ao salvar. Tente novamente.'); }
+      finally { $('enviar').disabled = false; $('enviar-texto').textContent = 'Enviar avaliação'; }
+    });
+    $('outra').addEventListener('click', () => {
+      id = novoId(); $('form').reset(); $('status').textContent = '';
+      $('pergunta').textContent = 'O que achou do stand?';
+      atualizarProgresso();
+      atualizarContadores();
+      $('sucesso').hidden = true; $('form').hidden = false; $('curso').focus();
+    });
+  </script>
 </body>
 </html>
