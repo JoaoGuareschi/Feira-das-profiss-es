@@ -7,11 +7,14 @@ import { loadEnvFile } from 'node:process';
 import { createAdmin } from './admin.js';
 import { abrirChrome } from './abrir-chrome.js';
 import { createHash } from 'node:crypto';
+import { resolvePublicConfig } from './origem.js';
 
 try { loadEnvFile(fileURLToPath(new URL('./.env', import.meta.url))); }
 catch (error) { if (error.code !== 'ENOENT') throw error; }
 
-const port = process.env.PORT || 10000;
+const {origin:appOrigin, production, ignoredLocalOrigin} = resolvePublicConfig();
+if (ignoredLocalOrigin) console.warn('APP_ORIGIN local ignorada no Render. Usando a URL pública fornecida pela hospedagem. Remova o valor localhost das variáveis do serviço.');
+const port = process.env.PORT || 3000;
 const host = '0.0.0.0';
 const cursos = JSON.parse(readFileSync(new URL('./cursos.json', import.meta.url), 'utf8'));
 if (!Array.isArray(cursos) || cursos.some(c => typeof c !== 'string' || !c.trim()) || new Set(cursos).size !== cursos.length) throw new Error('Confira a lista em cursos.json.');
@@ -35,7 +38,6 @@ const pagina = readFileSync(new URL('./index.html', import.meta.url));
 const scripts = [...pagina.toString('utf8').matchAll(/<script type="module">([\s\S]*?)<\/script>/g)];
 const scriptHashes = scripts.map(([,source]) => `'sha256-${createHash('sha256').update(source.replace(/\r\n?/g, '\n')).digest('base64')}'`).join(' ');
 const publicCsp = `default-src 'none'; script-src 'self' ${scriptHashes}; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests`;
-const appOrigin = new URL(process.env.APP_ORIGIN || `http://localhost:${port}`).origin;
 const submissionLimits = new Map();
 function allowSubmission(ip) {
   const now = Date.now();
@@ -58,10 +60,10 @@ http.createServer(async (req, res) => {
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
     res.setHeader('Content-Security-Policy', publicCsp);
-    if (process.env.NODE_ENV === 'production') res.setHeader('Strict-Transport-Security', 'max-age=31536000');
+    if (production) res.setHeader('Strict-Transport-Security', 'max-age=31536000');
     // Preserva a origem em formulários locais para a validação contra CSRF.
     res.setHeader('Referrer-Policy', 'same-origin');
-    const path = new URL(req.url, 'http://localhost').pathname;
+    const path = new URL(req.url, appOrigin).pathname;
     if (req.method === 'GET' && ['/tema.js', '/tema.css'].includes(path)) {
       res.writeHead(200, {'Content-Type':path.endsWith('.js') ? 'text/javascript; charset=utf-8' : 'text/css; charset=utf-8'});
       return res.end(readFileSync(new URL('.' + path, import.meta.url)));
@@ -111,5 +113,6 @@ http.createServer(async (req, res) => {
   }
 }).listen(Number(port), host, () => {
   console.log('Feira disponível na porta ' + port);
+  console.log('Endereço público: ' + appOrigin);
   if (process.env.OPEN_CHROME === '1') abrirChrome(`http://localhost:${port}`);
 });

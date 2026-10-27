@@ -2,6 +2,7 @@ import { randomBytes, scryptSync, scrypt, timingSafeEqual, createHash } from 'no
 import { promisify } from 'node:util';
 import { renderGraficos } from './graficos.js';
 import { renderRespostas } from './respostas.js';
+import { resolvePublicConfig } from './origem.js';
 
 const derive = promisify(scrypt);
 const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
@@ -10,7 +11,7 @@ const layout = (title, content) => `<!doctype html><html lang="pt-BR"><meta char
 export function createAdmin(db) {
   const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
   const password = process.env.ADMIN_PASSWORD;
-  const production = process.env.NODE_ENV === 'production';
+  const {production, origin} = resolvePublicConfig();
   const configured = Boolean(email && password && password.length >= 16);
   if (!configured) console.warn('Painel administrativo indisponível: configure ADMIN_EMAIL e ADMIN_PASSWORD com pelo menos 16 caracteres no .env. O questionário continua disponível.');
   const salt = randomBytes(32);
@@ -21,12 +22,6 @@ export function createAdmin(db) {
   const cookieName = production ? '__Host-feira_admin' : 'feira_admin';
   const hash = value => createHash('sha256').update(value).digest('hex');
   const cookie = (token, age) => `${cookieName}=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${age}${production ? '; Secure' : ''}`;
-  const originFor = req => {
-    if (process.env.APP_ORIGIN) return new URL(process.env.APP_ORIGIN).origin;
-    const proto = req.headers['x-forwarded-proto'] || 'http';
-    const host = req.headers.host || 'localhost:3000';
-    return `${proto}://${host}`;
-  };
   function token(req) {
     return req.headers.cookie?.split(';').map(c => c.trim()).find(c => c.startsWith(cookieName + '='))?.slice(cookieName.length + 1) || '';
   }
@@ -56,7 +51,6 @@ export function createAdmin(db) {
   }
   async function handle(req, res, path) {
     if (!(path === '/admin' || path.startsWith('/admin/'))) return false;
-    const origin = originFor(req);
     res.setHeader('Content-Security-Policy', "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'");
     if (path === '/admin/login' && req.method === 'GET') {
       if (session(req)) { redirect(res, '/admin'); return true; }

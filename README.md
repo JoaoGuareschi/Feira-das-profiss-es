@@ -77,7 +77,11 @@ Somente o par exato de e-mail e senha configurado permite entrar. Não existe ca
 
 ### Publicar com HTTPS
 
-Na hospedagem, configure `NODE_ENV=production` e `APP_ORIGIN=https://seu-dominio.com`, além de `ADMIN_EMAIL` e `ADMIN_PASSWORD`, nas variáveis privadas do serviço. `APP_ORIGIN` deve ser a origem exata usada no navegador (protocolo, domínio e porta, se houver). A produção recusa iniciar sem uma origem HTTPS. Configure a hospedagem para redirecionar HTTP para HTTPS.
+Na hospedagem, configure `NODE_ENV=production`, `ADMIN_EMAIL` e `ADMIN_PASSWORD` nas variáveis privadas do serviço. No Render, remova `APP_ORIGIN` para usar automaticamente `RENDER_EXTERNAL_URL`, fornecida pela plataforma, ou configure `APP_ORIGIN=https://seu-dominio.com` se usar um domínio personalizado. Não use a porta interna `10000` no endereço público HTTPS.
+
+No painel do Render, abra **Environment**, remova o `APP_ORIGIN` que aponta para localhost (ou substitua pelo endereço HTTPS real) e escolha **Save, rebuild, and deploy** após enviar os arquivos atualizados ao repositório conectado. Depois, abra uma nova página de `/admin/login` no domínio público. Não reenvie o formulário antigo do navegador. O código local precisa ser publicado no Render para essa correção entrar em vigor.
+
+Login, logout, exclusão e envio das avaliações usam a mesma origem configurada. No Render, uma configuração antiga de `APP_ORIGIN` com localhost é ignorada com aviso no log. Se um domínio personalizado estiver configurado, acesse por ele. O sistema não confia no cabeçalho Host ou X-Forwarded-Proto enviado pelo visitante para autorizar requisições. Fora do Render, produção exige `APP_ORIGIN` HTTPS explicitamente. Cookies administrativos recebem Secure em produção e no Render. Configure a hospedagem para redirecionar HTTP para HTTPS.
 
 Use um único processo Node.js e disco persistente para o SQLite. Para múltiplos processos ou servidores, será necessário compartilhar sessões e limites de tentativas em um serviço central. A configuração local HTTP destina-se ao desenvolvimento: use HTTPS antes de fazer login pela internet ou por uma rede compartilhada.
 

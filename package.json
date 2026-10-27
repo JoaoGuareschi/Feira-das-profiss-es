@@ -3,6 +3,6 @@
   "private": true,
   "license": "UNLICENSED",
   "type": "module",
-  "scripts": { "start": "node server.js", "test": "node --test auth.test.js" },
+  "scripts": { "start": "node server.js", "test": "node --test auth.test.js origem.test.js" },
   "engines": { "node": ">=24" }
 }
