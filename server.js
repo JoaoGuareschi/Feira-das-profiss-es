@@ -34,6 +34,12 @@ try {
   }
   db.exec('COMMIT');
 } catch (error) { db.exec('ROLLBACK'); throw error; }
+// Índices aceleram paginação, filtros e ordenação sem limitar o total de respostas.
+db.exec(`
+  CREATE INDEX IF NOT EXISTS respostas_data_id ON respostas(data DESC, id ASC);
+  CREATE INDEX IF NOT EXISTS respostas_curso_data ON respostas(curso, data DESC, id ASC);
+  CREATE INDEX IF NOT EXISTS respostas_nota_data ON respostas(nota DESC, data DESC, id ASC);
+`);
 const pagina = readFileSync(new URL('./index.html', import.meta.url));
 const scripts = [...pagina.toString('utf8').matchAll(/<script type="module">([\s\S]*?)<\/script>/g)];
 const scriptHashes = scripts.map(([,source]) => `'sha256-${createHash('sha256').update(source.replace(/\r\n?/g, '\n')).digest('base64')}'`).join(' ');
@@ -84,7 +90,7 @@ http.createServer(async (req, res) => {
       let body = ''; let bytes = 0;
       for await (const chunk of req) {
         bytes += chunk.length;
-        if (bytes > 16384) { json(res, 413, { erro: 'Resposta muito longa.' }); return; }
+        if (bytes > 65536) { json(res, 413, { erro: 'Resposta muito longa.' }); return; }
         body += chunk;
       }
       let dados;
@@ -92,6 +98,7 @@ http.createServer(async (req, res) => {
       if (!dados || typeof dados !== 'object' || Array.isArray(dados)) return json(res,400,{erro:'Resposta inválida.'});
       const { id, curso, nota, comentario = '', gostou = '', sugestoes = '' } = dados ?? {};
       if (typeof id !== 'string' || !/^[a-f0-9-]{36}$/i.test(id) || !cursos.includes(curso) || !Number.isInteger(nota) || nota < 1 || nota > 5 || [comentario, gostou, sugestoes].some(v => typeof v !== 'string')) return json(res, 400, { erro: 'Dados inválidos.' });
+      if (gostou.length > 3000 || sugestoes.length > 1500 || comentario.length > 1000) return json(res,400,{erro:'Chegou o limite de caracteres. Use até 3.000 na opinião e 1.500 na sugestão.'});
       const anterior = db.prepare('SELECT curso, nota, comentario, gostou, sugestoes FROM respostas WHERE id = ?').get(id);
       if (anterior && (anterior.curso !== curso || anterior.nota !== nota || anterior.comentario !== comentario.trim() || anterior.gostou !== gostou.trim() || anterior.sugestoes !== sugestoes.trim())) return json(res, 200, { salvo: true });
       db.prepare('INSERT OR IGNORE INTO respostas (id, curso, nota, comentario, data, gostou, sugestoes) VALUES (?, ?, ?, ?, ?, ?, ?)').run(id, curso, nota, comentario.trim(), new Date().toISOString(), gostou.trim(), sugestoes.trim());

@@ -1,6 +1,6 @@
 # Feira das Profissões
 
-Aplicação web em JavaScript para coletar avaliações dos stands e acompanhar os resultados em um painel administrativo. Inclui emojis de satisfação, elogios e sugestões separados, modo claro/escuro e gráficos por curso.
+Aplicação web em JavaScript para coletar avaliações dos estandes e acompanhar os resultados em um painel administrativo. Inclui emojis de satisfação, elogios e sugestões separados, modo claro/escuro e gráficos por curso.
 
 ## GitHub e hospedagem
 
@@ -25,9 +25,13 @@ Para visitantes em redes diferentes, hospede este servidor em um serviço Node.j
 
 ## Dados e planilha
 
+Não existe limite fixo de 6.000 avaliações. O teste `node --test capacidade.test.js` verifica 10.001 respostas em banco temporário, incluindo inserção pela API, reinício do servidor, última página do painel, gráficos e exportação completa. Os índices por data, curso e nota ajudam nas consultas. As 50 respostas por página não limitam o armazenamento; gráficos e CSV consideram todas as respostas.
+
+Essa validação é de volume armazenado, não de 10.000 acessos simultâneos. A capacidade real depende do espaço em disco e dos recursos da hospedagem. No Render, confirme disco persistente e `DATA_DIR` apontando para ele. O limite de proteção contra envios excessivos por IP é independente da quantidade de registros no banco.
+
 O arquivo `dados/feira.sqlite` guarda todas as respostas no servidor. Preserve essa pasta entre reinícios e faça backups com o servidor parado. Serviços com disco temporário perdem os dados.
 
-O questionário possui dois campos opcionais independentes: **O que você gostou?** e **Sugestões para melhorar**, com até 1.000 caracteres cada. O banco é atualizado automaticamente ao iniciar, adicionando as colunas sem apagar registros. Comentários anteriores continuam disponíveis como **Comentário antigo** no painel e no CSV. Nos gráficos, o contador de comentários representa avaliações com pelo menos um texto preenchido, incluindo comentários antigos, sem contar duas vezes quem preencheu ambos os novos campos.
+O questionário possui dois campos opcionais independentes: **O que você gostou?** e **Sugestões para melhorar**, com até 3.000 caracteres na opinião e 1.500 na sugestão. Não há contador visível: ao atingir o limite, aparece o aviso “Chegou o limite de caracteres”, com estilo de código e identificação DS. O aviso desaparece ao apagar parte do texto. O banco é atualizado automaticamente ao iniciar, adicionando as colunas sem apagar registros. Comentários anteriores continuam disponíveis como **Comentário antigo** no painel e no CSV. Nos gráficos, o contador de comentários representa avaliações com pelo menos um texto preenchido, incluindo comentários antigos, sem contar duas vezes quem preencheu ambos os novos campos.
 
 ## Login do administrador
 

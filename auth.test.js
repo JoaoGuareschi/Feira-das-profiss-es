@@ -64,7 +64,7 @@ test('login, proteção dos dados, CSRF, escape de HTML, logout e limite de tent
     assert.equal((await submit(newFeedback)).status, 200);
     assert.equal((await submit(newFeedback)).status, 200);
     assert.equal((await submit({...newFeedback,sugestoes:'Outra ideia'})).status, 409);
-    assert.equal((await submit({...newFeedback,id:randomUUID(),gostou:'x'.repeat(1001)})).status, 400);
+    assert.equal((await submit({...newFeedback,id:randomUUID(),gostou:'x'.repeat(3001)})).status, 400);
     const updatedPanel = await (await request('/admin', {headers:{Cookie:cookie}})).text();
     assert.ok(updatedPanel.includes('Gostei da atividade prática &lt;b&gt;ótima&lt;/b&gt;'));
     assert.ok(updatedPanel.includes('Mais tempo para perguntas'));

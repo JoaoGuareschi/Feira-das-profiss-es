@@ -17,6 +17,7 @@ main{padding:0 16px}.edition{display:none}.layout{padding-top:18px;gap:4px}.intr
 .mobile-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:13px 0 0}.fact{background:white;border:1px solid #dce5f5;border-radius:16px;padding:13px 6px;text-align:center}.fact b{display:block;color:#235ce6;font-size:20px;line-height:1.4}.fact span{font-size:10px;color:#5c7092;display:block;margin-top:3px}
 .mobile-progress{display:block;margin:0 0 22px}.progress-top{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:#51688d;margin-bottom:9px}.progress-track{height:5px;border-radius:10px;background:#eaf0fc;overflow:hidden}.progress-fill{display:block;width:0;height:100%;background:linear-gradient(90deg,#235ce6,#58a3ff);border-radius:10px;transition:width .35s ease}.mobile-tip{display:flex;align-items:center;gap:8px;margin:0 0 18px;font-size:12px;color:#47628c;background:#f0f5ff;border-radius:10px;padding:10px 12px;line-height:1.5}
 .card-head{padding-bottom:16px;margin-bottom:17px}.card-head h2{font-size:20px}.card-head p{font-size:12px}form{padding:20px 16px}.notas{gap:6px;margin-top:8px}.notas label{padding:14px 2px 10px;border-radius:15px;min-height:87px;touch-action:manipulation}.notas strong{font-size:clamp(26px,7vw,34px);line-height:1.35;animation:pular-emoji 1.4s ease-in-out 3}.notas label:nth-child(2) strong{animation-delay:.12s}.notas label:nth-child(3) strong{animation-delay:.24s}.notas label:nth-child(4) strong{animation-delay:.36s}.notas label:nth-child(5) strong{animation-delay:.48s}.notas label:has(input:checked) strong{animation:comemorar .55s ease 1}.notas label:has(input:focus-visible){outline:3px solid #497ef1;outline-offset:3px}.notas input{width:13px;height:13px;margin-bottom:7px}.escala{margin-top:10px}select,textarea{font-size:16px}textarea{min-height:90px}#enviar{min-height:54px}.sucesso{background:linear-gradient(160deg,#fff,#eff5ff)}
+}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
 .feedback-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:26px 0 13px}.feedback-heading h3{font-size:15px;margin:0}.feedback-heading>span{font-size:10px;color:#657694;border:1px solid #dce5f5;border-radius:20px;padding:5px 9px}.feedback-card{position:relative;border:1px solid var(--borda);border-radius:18px;padding:18px;margin:12px 0;background:var(--fundo);transition:border-color .2s,box-shadow .2s,transform .2s;overflow:hidden}.feedback-card:focus-within{border-color:var(--acento);box-shadow:0 0 0 3px var(--halo);transform:translateY(-2px)}.feedback-card.gostou{--borda:#bfdedb;--fundo:linear-gradient(125deg,#edf9f7,#f5fbff);--acento:#087f7b;--halo:#0d948815}.feedback-card.sugestoes{--borda:#d9cdf4;--fundo:linear-gradient(125deg,#f3eeff,#fff6ed);--acento:#7448c7;--halo:#7c3aed12}.feedback-title{display:flex;gap:11px;align-items:center}.feedback-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;background:white;border:1px solid var(--borda);font-size:22px;flex-shrink:0}.feedback-title label{color:var(--acento);font-weight:750;font-size:15px}.feedback-title p{font-size:11px;margin:3px 0 0;line-height:1.5}.feedback-card textarea{background:#ffffffd9;border-color:var(--borda);min-height:100px;margin:13px 0 7px;box-shadow:none;font-size:14px}.feedback-card textarea:focus{border-color:var(--acento)}.feedback-meta{display:flex;justify-content:space-between;gap:10px;font-size:10px;color:#5a6b89;line-height:1.6}.feedback-meta output{white-space:nowrap;font-variant-numeric:tabular-nums}.feedback-hints{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}.feedback-hints span{font-size:10px;border:1px solid var(--borda);background:#ffffff85;border-radius:20px;padding:4px 9px;color:var(--acento)}.feedback-note{font-size:11px;margin:12px 0 20px;color:#607392}@media(max-width:700px){.feedback-card{padding:15px}.feedback-card textarea{font-size:16px}.feedback-heading h3{font-size:14px}.feedback-heading>span{font-size:9px}.feedback-meta{font-size:10px}}@media(prefers-reduced-motion:reduce){.feedback-card{transition:none;transform:none}}
 </style>
@@ -30,7 +31,7 @@ main{padding:0 16px}.edition{display:none}.layout{padding-top:18px;gap:4px}.intr
     </header>
     <div class="layout">
       <section class="intro" aria-labelledby="titulo">
-        <div class="mobile-welcome"><span class="mobile-kicker">&lt; sua experiência importa /&gt;</span><h2>Visitou. Descobriu.<br>Conta pra gente! <span aria-hidden="true">✦</span></h2><p>Escolha o stand e toque na carinha que combina com sua experiência.</p><span class="mobile-tag">Um toque de opinião, muitas possibilidades.</span></div>
+        <div class="mobile-welcome"><span class="mobile-kicker">&lt; sua experiência importa /&gt;</span><h2>Visitou. Descobriu.<br>Conta pra gente! <span aria-hidden="true">✦</span></h2><p>Escolha o estande e toque na carinha que combina com sua experiência.</p><span class="mobile-tag">Um toque de opinião, muitas possibilidades.</span></div>
         <div class="mobile-facts" aria-label="Sobre a avaliação"><div class="fact"><b id="total-cursos">—</b><span>cursos para explorar</span></div><div class="fact"><b>2</b><span>escolhas obrigatórias</span></div><div class="fact"><b id="total-visita">0</b><span>envios nesta visita</span></div></div>
         <span class="eyebrow"><span class="dot" aria-hidden="true"></span> EXPLORE. DESCUBRA. CONECTE.</span>
         <h1 id="titulo">O futuro começa<br> com uma <span>boa<br> experiência.</span></h1>
@@ -45,44 +46,46 @@ main{padding:0 16px}.edition{display:none}.layout{padding-top:18px;gap:4px}.intr
 
 <span class="blue">construir</span>(futuro); <span class="cursor"></span></pre></div>
       </section>
-      <section class="form-area" aria-label="Avaliação do stand">
-        <p id="carregamento" role="status">Carregando os stands…</p>
+      <section class="form-area" aria-label="Avaliação do estande">
+        <p id="carregamento" role="status">Carregando os estandes…</p>
         <form id="form" hidden>
           <div class="card-head"><span class="card-icon" aria-hidden="true">↗</span><div><h2>Conte sua experiência</h2><p>Uma visita, uma descoberta, uma opinião.</p></div></div>
-          <div class="mobile-progress"><div class="progress-top"><span id="progresso-texto">Comece escolhendo um stand</span><span id="progresso-contagem">0 de 2</span></div><div class="progress-track" id="progresso" role="progressbar" aria-label="Escolhas obrigatórias preenchidas" aria-valuemin="0" aria-valuemax="2" aria-valuenow="0"><span class="progress-fill" id="progresso-barra"></span></div></div>
-          <label for="curso"><span class="step" aria-hidden="true">01</span> Qual stand você visitou?</label>
+          <div class="mobile-progress"><div class="progress-top"><span id="progresso-texto">Comece escolhendo um estande</span><span id="progresso-contagem">0 de 2</span></div><div class="progress-track" id="progresso" role="progressbar" aria-label="Escolhas obrigatórias preenchidas" aria-valuemin="0" aria-valuemax="2" aria-valuenow="0"><span class="progress-fill" id="progresso-barra"></span></div></div>
+          <label for="curso"><span class="step" aria-hidden="true">01</span> Qual estande você visitou?</label>
           <select id="curso" required><option value="">Selecione o curso</option></select>
           <fieldset>
-            <legend><span class="step" aria-hidden="true">02</span><span id="pergunta">O que achou do stand?</span></legend>
+            <legend><span class="step" aria-hidden="true">02</span><span id="pergunta">O que achou do estande?</span></legend>
             <div class="notas">
-              <label title="Muito ruim"><input type="radio" name="nota" value="1" aria-label="Muito ruim" required><strong aria-hidden="true">😞</strong></label>
-              <label title="Ruim"><input type="radio" name="nota" value="2" aria-label="Ruim"><strong aria-hidden="true">🙁</strong></label>
-              <label title="Regular"><input type="radio" name="nota" value="3" aria-label="Regular"><strong aria-hidden="true">😐</strong></label>
-              <label title="Bom"><input type="radio" name="nota" value="4" aria-label="Bom"><strong aria-hidden="true">🙂</strong></label>
-              <label title="Excelente"><input type="radio" name="nota" value="5" aria-label="Excelente"><strong aria-hidden="true">🤩</strong></label>
+              <label title="Muito ruim"><input type="radio" name="nota" value="1" aria-label="Muito ruim" required><strong aria-hidden="true">😞</strong><span class="nota-caption" aria-hidden="true">Muito ruim</span></label>
+              <label title="Ruim"><input type="radio" name="nota" value="2" aria-label="Ruim"><strong aria-hidden="true">🙁</strong><span class="nota-caption" aria-hidden="true">Ruim</span></label>
+              <label title="Regular"><input type="radio" name="nota" value="3" aria-label="Regular"><strong aria-hidden="true">😐</strong><span class="nota-caption" aria-hidden="true">Regular</span></label>
+              <label title="Bom"><input type="radio" name="nota" value="4" aria-label="Bom"><strong aria-hidden="true">🙂</strong><span class="nota-caption" aria-hidden="true">Bom</span></label>
+              <label title="Excelente"><input type="radio" name="nota" value="5" aria-label="Excelente"><strong aria-hidden="true">🤩</strong><span class="nota-caption" aria-hidden="true">Excelente</span></label>
             </div>
             <div class="escala"><span>Muito ruim</span><span>Excelente</span></div>
           </fieldset>
-          <p class="mobile-tip" id="dica-nota" aria-live="polite"><span aria-hidden="true">☝️</span> Toque em uma carinha para avaliar.</p>
+          <p class="mobile-tip" id="dica-nota" aria-live="polite">Selecione a expressão que representa sua experiência.</p>
           <div class="feedback-heading"><h3><span class="step" aria-hidden="true">03</span> Sua experiência, em palavras</h3><span>DOIS CAMPOS OPCIONAIS</span></div>
           <div class="feedback-card gostou">
-            <div class="feedback-title"><span class="feedback-icon" aria-hidden="true">✨</span><div><label for="gostou">O que você gostou?</label><p>Qual detalhe marcou sua visita?</p></div></div>
-            <div class="feedback-hints" aria-hidden="true"><span>🎤 Apresentação</span><span>🤝 Atendimento</span><span>🧪 Atividades</span></div>
-            <textarea id="gostou" maxlength="1000" rows="3" aria-describedby="gostou-ajuda" placeholder="Conte o que chamou sua atenção no stand…"></textarea>
-            <div class="feedback-meta"><span id="gostou-ajuda">Vale um detalhe ou uma descoberta!</span><output id="gostou-contagem" for="gostou" aria-label="Caracteres no campo o que gostou">0 / 1000</output></div>
+            <div class="feedback-title"><span class="feedback-icon" aria-hidden="true">01</span><div><label for="gostou">O que você gostou?</label><p>Qual detalhe marcou sua visita?</p></div></div>
+            <div class="feedback-hints" aria-hidden="true"><span>Apresentação</span><span>Atendimento</span><span>Atividades</span></div>
+            <textarea id="gostou" maxlength="3000" rows="3" aria-describedby="gostou-ajuda gostou-limite" placeholder="Conte o que chamou sua atenção no estande…"></textarea>
+            <div class="feedback-meta"><span id="gostou-ajuda">Opcional. Seu ponto de vista ajuda a melhorar a feira.</span></div>
+            <p class="aviso-limite" id="gostou-limite" role="status" aria-live="polite"></p>
           </div>
           <div class="feedback-card sugestoes">
-            <div class="feedback-title"><span class="feedback-icon" aria-hidden="true">💡</span><div><label for="sugestoes">Sugestões para melhorar</label><p>Sua ideia pode transformar a próxima feira.</p></div></div>
-            <div class="feedback-hints" aria-hidden="true"><span>🛠️ Melhorias</span><span>🚀 Novas ideias</span><span>🎯 Organização</span></div>
-            <textarea id="sugestoes" maxlength="1000" rows="3" aria-describedby="sugestoes-ajuda" placeholder="O que você mudaria ou gostaria de ver na próxima vez?"></textarea>
-            <div class="feedback-meta"><span id="sugestoes-ajuda">Toda sugestão construtiva é bem-vinda.</span><output id="sugestoes-contagem" for="sugestoes" aria-label="Caracteres no campo sugestões">0 / 1000</output></div>
+            <div class="feedback-title"><span class="feedback-icon" aria-hidden="true">02</span><div><label for="sugestoes">Sugestões para melhorar</label><p>Sua ideia pode transformar a próxima feira.</p></div></div>
+            <div class="feedback-hints" aria-hidden="true"><span>Melhorias</span><span>Novas ideias</span><span>Organização</span></div>
+            <textarea id="sugestoes" maxlength="1500" rows="3" aria-describedby="sugestoes-ajuda sugestoes-limite" placeholder="O que você mudaria ou gostaria de ver na próxima vez?"></textarea>
+            <div class="feedback-meta"><span id="sugestoes-ajuda">Opcional. Compartilhe uma ideia para a próxima edição.</span></div>
+            <p class="aviso-limite" id="sugestoes-limite" role="status" aria-live="polite"></p>
           </div>
-          <p class="feedback-note">🔒 Não inclua nomes, telefones ou outros dados pessoais.</p>
+          <p class="feedback-note">Não inclua nomes, telefones ou outros dados pessoais.</p>
           <button id="enviar"><span id="enviar-texto">Enviar avaliação</span><span class="arrow" aria-hidden="true">→</span></button>
           <p id="status" role="status" aria-live="polite"></p>
           <small class="privacy"><span aria-hidden="true">◇</span> Salvamos apenas curso, nota, seus textos opcionais e data.</small>
         </form>
-        <section class="sucesso" id="sucesso" role="status" tabindex="-1" hidden><span class="check" aria-hidden="true">✓</span><h2>Sua opinião faz parte do futuro.</h2><p>Avaliação salva! Obrigado por ajudar nossa turma a construir uma feira melhor.</p><button id="outra">Avaliar outro stand <span class="arrow" aria-hidden="true">→</span></button></section>
+        <section class="sucesso" id="sucesso" role="status" tabindex="-1" hidden><span class="check" aria-hidden="true">✓</span><h2>Sua opinião faz parte do futuro.</h2><p>Avaliação salva! Obrigado por ajudar nossa turma a construir uma feira melhor.</p><button id="outra">Avaliar outro estande <span class="arrow" aria-hidden="true">→</span></button></section>
       </section>
     </div>
     <footer><span class="credit"><code aria-hidden="true">&lt;/&gt;</code> DS · Desenvolvimento de Sistemas</span><a href="/admin">Área da organização ↗</a></footer>
@@ -92,10 +95,13 @@ main{padding:0 16px}.edition{display:none}.layout{padding-top:18px;gap:4px}.intr
     const novoId = () => typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, c => (Number(c) ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> Number(c) / 4).toString(16));
     let id = novoId();
     let enviosNestaVisita = 0;
-    function atualizarContadores() {
-      for (const campo of ['gostou', 'sugestoes']) $(campo + '-contagem').textContent = `${$(campo).value.length} / 1000`;
+    function atualizarAvisos() {
+      for (const campo of ['gostou', 'sugestoes']) {
+        const mensagem = $(campo).value.length >= $(campo).maxLength ? 'Chegou o limite de caracteres' : '';
+        if ($(campo + '-limite').textContent !== mensagem) $(campo + '-limite').textContent = mensagem;
+      }
     }
-    for (const campo of ['gostou', 'sugestoes']) $(campo).addEventListener('input', atualizarContadores);
+    for (const campo of ['gostou', 'sugestoes']) $(campo).addEventListener('input', atualizarAvisos);
     const descricoes = ['Muito ruim', 'Ruim', 'Regular', 'Bom', 'Excelente'];
     function atualizarProgresso() {
       const nota = $('form').querySelector('input[name="nota"]:checked');
@@ -103,8 +109,8 @@ main{padding:0 16px}.edition{display:none}.layout{padding-top:18px;gap:4px}.intr
       $('progresso').setAttribute('aria-valuenow', String(total));
       $('progresso-barra').style.width = `${total * 50}%`;
       $('progresso-contagem').textContent = `${total} de 2`;
-      $('progresso-texto').textContent = total === 2 ? 'Tudo pronto! Pode enviar.' : !$('curso').value ? 'Escolha o stand que você visitou' : 'Agora escolha sua carinha';
-      $('dica-nota').textContent = nota ? `${descricoes[Number(nota.value) - 1]} — você pode mudar antes de enviar.` : '☝️ Toque em uma carinha para avaliar.';
+      $('progresso-texto').textContent = total === 2 ? 'Tudo pronto! Pode enviar.' : !$('curso').value ? 'Escolha o estande que você visitou' : 'Agora escolha sua carinha';
+      $('dica-nota').textContent = nota ? `${descricoes[Number(nota.value) - 1]} — você pode mudar antes de enviar.` : 'Selecione a expressão que representa sua experiência.';
     }
     $('form').addEventListener('change', atualizarProgresso);
     try {
@@ -115,8 +121,8 @@ main{padding:0 16px}.edition{display:none}.layout{padding-top:18px;gap:4px}.intr
       for (const curso of cursos) $('curso').add(new Option(curso, curso));
       $('carregamento').textContent = cursos.length ? '' : 'A feira está sendo preparada. Os cursos serão adicionados em breve!';
       $('form').hidden = !cursos.length;
-    } catch { $('carregamento').textContent = 'Não foi possível carregar os stands. Atualize a página para tentar novamente.'; }
-    $('curso').addEventListener('change', () => { $('pergunta').textContent = $('curso').value ? `O que achou do stand de ${$('curso').value}?` : 'O que achou do stand?'; });
+    } catch { $('carregamento').textContent = 'Não foi possível carregar os estandes. Atualize a página para tentar novamente.'; }
+    $('curso').addEventListener('change', () => { $('pergunta').textContent = $('curso').value ? `O que achou do estande de ${$('curso').value}?` : 'O que achou do estande?'; });
     $('form').addEventListener('submit', async event => {
       event.preventDefault();
       $('enviar').disabled = true;
@@ -134,9 +140,9 @@ main{padding:0 16px}.edition{display:none}.layout{padding-top:18px;gap:4px}.intr
     });
     $('outra').addEventListener('click', () => {
       id = novoId(); $('form').reset(); $('status').textContent = '';
-      $('pergunta').textContent = 'O que achou do stand?';
+      $('pergunta').textContent = 'O que achou do estande?';
       atualizarProgresso();
-      atualizarContadores();
+      atualizarAvisos();
       $('sucesso').hidden = true; $('form').hidden = false; $('curso').focus();
     });
   </script>
