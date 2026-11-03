@@ -10,7 +10,7 @@ Este repositório contém o código do projeto. O GitHub Pages não executa o se
 
 Depois de clonar ou baixar o código, copie `.env.example` para `.env`, configure suas credenciais e execute `npm start`. Não há dependências externas para instalar. O `.env`, as avaliações em `dados/` e arquivos SQLite não devem ser enviados ao GitHub. Cada instalação mantém seu próprio banco; baixar o código não copia respostas da feira.
 
-Questionário em JavaScript para celular, com servidor Node.js e banco SQLite central. Não pede identificação dos visitantes. Os 12 cursos da feira estão configurados em `cursos.json`.
+Questionário em JavaScript para celular, com servidor Node.js e banco SQLite central. Não pede identificação dos visitantes. As 25 turmas da feira estão configuradas em `cursos.json`.
 
 ## Rodar
 

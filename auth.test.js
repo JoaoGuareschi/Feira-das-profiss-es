@@ -47,6 +47,33 @@ test('login, proteção dos dados, CSRF, escape de HTML, logout e limite de tent
     assert.equal(emptyCharts.status, 200);
     assert.ok((await emptyCharts.text()).includes('Ainda não há avaliações.'));
     const cursos = await (await request('/api/cursos')).json();
+    assert.deepEqual(cursos, [
+      '1º Ano EMI Administração',
+      '2º Ano EMI Administração',
+      'Agronomia – UFRA',
+      '2º Ano EMI Agropecuária',
+      '3º Ano EMI Agropecuária',
+      '1º Ano EMI Agropecuária',
+      '2º Ano EMI Recursos Humanos',
+      '1º Ano EMI Recursos Humanos',
+      '3º Ano EMI Recursos Humanos',
+      '1º Semestre – Técnico Apoio Escolar (SUB)',
+      '2º Ano EMI Programação de Jogos Digitais',
+      '3º Ano EMI Programação de Jogos Digitais',
+      '2º Ano EMI Multimídia',
+      '1º Ano EMI Multimídia',
+      '3º Ano EMI Multimídia',
+      'Técnico em Zootecnia (SUB)',
+      '1º Ano EMI Zootecnia',
+      '3º Ano EMI Agricultura',
+      '1º Ano EMI Mineração',
+      '1º Ano EMI Desenvolvimento de Sistemas',
+      'Pré-ENEM',
+      '3º Ano EMI Administração',
+      '1º Ano EMI Ciências de Dados',
+      '3º Ano EMI Agroindústria',
+      'Técnico em Logística (SUB)'
+    ]);
     assert.equal((await request('/api/respostas', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id:randomUUID(),curso:cursos[0],nota:5,comentario:'<script>alert(1)</script>'})})).status, 200);
     result = await request('/admin', {headers:{Cookie:cookie}});
     assert.equal(result.status, 200);
