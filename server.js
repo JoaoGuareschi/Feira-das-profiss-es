@@ -19,6 +19,12 @@ const host = '0.0.0.0';
 const cursos = JSON.parse(readFileSync(new URL('./cursos.json', import.meta.url), 'utf8'));
 if (!Array.isArray(cursos) || cursos.some(c => typeof c !== 'string' || !c.trim()) || new Set(cursos).size !== cursos.length) throw new Error('Confira a lista em cursos.json.');
 const pasta = process.env.DATA_DIR ? pathToFileURL(resolve(process.env.DATA_DIR) + '/') : new URL('./dados/', import.meta.url);
+console.log('Arquivo do banco: ' + fileURLToPath(new URL('feira.sqlite', pasta)));
+if (process.env.RENDER === 'true') {
+  console.warn(process.env.DATA_DIR
+    ? 'Persistência: confirme no painel que DATA_DIR está dentro do disco persistente. Definir a variável não cria o disco.'
+    : 'ATENÇÃO: DATA_DIR não configurado. O SQLite pode estar em disco temporário e perder avaliações no próximo deploy/reinício. Faça backup antes de alterar a hospedagem.');
+}
 mkdirSync(pasta, { recursive: true });
 const db = new DatabaseSync(fileURLToPath(new URL('feira.sqlite', pasta)));
 db.exec(`CREATE TABLE IF NOT EXISTS respostas (

@@ -3,6 +3,11 @@
   "private": true,
   "license": "UNLICENSED",
   "type": "module",
-  "scripts": { "start": "node server.js", "test": "node --test auth.test.js origem.test.js graficos-live.test.js limites.test.js capacidade.test.js ranking.test.js" },
-  "engines": { "node": ">=24" }
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test auth.test.js origem.test.js graficos-live.test.js limites.test.js capacidade.test.js ranking.test.js banco.test.js"
+  },
+  "engines": {
+    "node": ">=24"
+  }
 }
