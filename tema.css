@@ -152,6 +152,7 @@ html[data-theme=dark] .feedback-card.sugestoes .feedback-title label { color:#bd
 .aviso-limite { margin:12px 0 0; padding:12px 14px; border:1px solid #9bb7e7; border-radius:10px; background:#e0ebff; color:#204579; font:12px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace; }
 .aviso-limite:empty { display:none; }
 .aviso-limite::before { content:'</> DS · '; font-weight:750; }
+<<<<<<< HEAD
 html[data-theme=dark] .aviso-limite { background:#1b3050; border-color:#5b79a9; color:#dae8ff; }
 
 /* Ranking das turmas */
@@ -195,3 +196,6 @@ html[data-theme=dark] .ranking-trilho { background:#30435e; }
   .ranking-linha { gap:10px; padding:12px 10px; }
   .ranking-pontos { font-size:17px; }
 }
+=======
+html[data-theme=dark] .aviso-limite { background:#1b3050; border-color:#5b79a9; color:#dae8ff; }
+>>>>>>> 356c3e7eed74dc69d5cf0748cde0392f608a25fc
