@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { renderRanking } from './ranking.js';
 
 const cursos = JSON.parse(readFileSync(new URL('./cursos.json', import.meta.url), 'utf8'));
 const cores = ['#2563eb','#16a34a','#e78114','#0d9488','#7c3aed','#0891b2','#d85516','#a16207','#db2777','#9333ea','#c83f68','#50851b'];
@@ -38,6 +39,7 @@ export function renderGraficos(db, csrf) {
 <p id="status-graficos" role="status" aria-live="polite">Atualização automática a cada 20 segundos.</p>
 <p id="login-graficos" hidden>Sua sessão terminou. <a href="/admin/login">Entre novamente</a> para acompanhar os resultados.</p>
 <div id="dados-graficos">
+${renderRanking(items)}
 ${!total ? '<div class="empty"><strong>Ainda não há avaliações.</strong> Os gráficos serão preenchidos com as respostas reais dos visitantes. Nenhum dado de exemplo está sendo usado.</div>' : ''}
 <div class="stats"><article class="stat" style="--cor:#2563eb"><span>Total de avaliações</span><b>${numero(total)}</b><small>Respostas recebidas</small></article><article class="stat" style="--cor:#7c3aed"><span>Média geral</span><b>${average === null ? '—' : numero(average)}<small> / 5</small></b><small>Ponderada por avaliação</small></article><article class="stat" style="--cor:#0d9488"><span>Avaliações positivas</span><b>${total ? numero(positive / total * 100) + '%' : '—'}</b><small>Bom e Excelente · ${numero(positive)} respostas</small></article><article class="stat" style="--cor:#db2777"><span>Comentários recebidos</span><b>${numero(comments)}</b><small>${active.length} cursos com avaliações</small></article></div>
 <div class="charts"><section class="card"><h2>Como foi a experiência?</h2><p>Distribuição das avaliações, de Muito ruim a Excelente.</p>${pizza(ratings,total,'Distribuição das notas')}</section>
